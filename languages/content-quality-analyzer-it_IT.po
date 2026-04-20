@@ -1,0 +1,226 @@
+# Translation of content-quality-analyzer for it_IT
+# Copyright (C) 2024 Stanisław Chlebek
+# This file is distributed under the same license as the content-quality-analyzer plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Quality Analyzer 1.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/schlebek/content-quality-analyzer/issues\n"
+"POT-Creation-Date: 2026-04-20T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it-IT\n"
+"X-Generator: generate.js\n"
+
+msgid "%s ago"
+msgstr "%s fa"
+
+msgid "— load models →"
+msgstr "— carica modelli →"
+
+msgid "AI-Friendly"
+msgstr "Compatibile con IA"
+
+msgid "AI-Friendly Check"
+msgstr "Verifica compatibilità IA"
+
+msgid "Analyze all"
+msgstr "Analizza tutto"
+
+msgid "Analyze headings"
+msgstr "Analizza intestazioni"
+
+msgid "Analyze post"
+msgstr "Analizza articolo"
+
+msgid "Analyze readability"
+msgstr "Analizza leggibilità"
+
+msgid "Analyzing…"
+msgstr "Analisi in corso…"
+
+msgid "Analysis"
+msgstr "Analisi"
+
+msgid "Analysis History"
+msgstr "Cronologia analisi"
+
+msgid "API Configuration"
+msgstr "Configurazione API"
+
+msgid "API Costs"
+msgstr "Costi API"
+
+msgid "API Key"
+msgstr "Chiave API"
+
+msgid "All types"
+msgstr "Tutti i tipi"
+
+msgid "Apply selected fixes"
+msgstr "Applica correzioni selezionate"
+
+msgid "Batch analysis"
+msgstr "Analisi batch"
+
+msgid "Check AI-Friendly"
+msgstr "Verifica compatibilità IA"
+
+msgid "Check spelling"
+msgstr "Controlla ortografia"
+
+msgid "Click \"Test connection\" to load available models."
+msgstr "Fai clic su «Testa connessione» per caricare i modelli disponibili."
+
+msgid "Content Analyzer"
+msgstr "Analizzatore di contenuti"
+
+msgid "Content Quality Analyzer"
+msgstr "Analizzatore di qualità dei contenuti"
+
+msgid "Cost / analysis"
+msgstr "Costo / analisi"
+
+msgid "Dismiss all"
+msgstr "Ignora tutto"
+
+msgid "Estimated analysis costs (Gemini Flash)"
+msgstr "Costi di analisi stimati (Gemini Flash)"
+
+msgid "First configure your API key in the %s tab."
+msgstr "Prima configura la tua chiave API nella scheda %s."
+
+msgid "Flash = cheaper | Pro = better for long analyses"
+msgstr "Flash = più economico | Pro = migliore per analisi lunghe"
+
+msgid "Generate TL;DR"
+msgstr "Genera TL;DR"
+
+msgid "Gemini Model"
+msgstr "Modello Gemini"
+
+msgid "Get your API key from %s."
+msgstr "Ottieni la tua chiave API da %s."
+
+msgid "Google Gemini API Configuration"
+msgstr "Configurazione API Google Gemini"
+
+msgid "Heading Structure"
+msgstr "Struttura delle intestazioni"
+
+msgid "Hint (optional): e.g. simplify sentences, add examples…"
+msgstr "Suggerimento (facoltativo): es. semplificare le frasi, aggiungere esempi…"
+
+msgid "Insufficient permissions."
+msgstr "Permessi insufficienti."
+
+msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
+msgstr "Chiave non valida o nessun modello disponibile — verifica le autorizzazioni della chiave in Google AI Studio."
+
+msgid "Load list"
+msgstr "Carica elenco"
+
+msgid "Load posts"
+msgstr "Carica articoli"
+
+msgid "Missing API key or model. Please configure the plugin."
+msgstr "Chiave API o modello mancante. Configura il plugin."
+
+msgid "No content to analyze."
+msgstr "Nessun contenuto da analizzare."
+
+msgid "No content to check."
+msgstr "Nessun contenuto da controllare."
+
+msgid "No content to summarize."
+msgstr "Nessun contenuto da riassumere."
+
+msgid "No errors found. Text looks correct."
+msgstr "Nessun errore trovato. Il testo sembra corretto."
+
+msgid "No fragment to rewrite."
+msgstr "Nessun frammento da riscrivere."
+
+msgid "Overview"
+msgstr "Panoramica"
+
+msgid "Paste a text fragment to rewrite:"
+msgstr "Incolla un frammento di testo da riscrivere:"
+
+msgid "Paste text fragment…"
+msgstr "Incolla frammento di testo…"
+
+msgid "Please provide an API key."
+msgstr "Fornisci una chiave API."
+
+msgid "Post types to analyze"
+msgstr "Tipi di articolo da analizzare"
+
+msgid "Posts overview"
+msgstr "Panoramica degli articoli"
+
+msgid "Preparing…"
+msgstr "Preparazione…"
+
+msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
+msgstr "Prezzi per Gemini 2.0 Flash: $0,075/1M IN, $0,30/1M OUT (piano gratuito: nessun addebito fino al limite)"
+
+msgid "Readability"
+msgstr "Leggibilità"
+
+msgid "Reset counter"
+msgstr "Reimposta contatore"
+
+msgid "Rewrite Fragment"
+msgstr "Riscrivi frammento"
+
+msgid "Rewrite fragment"
+msgstr "Riscrivi frammento"
+
+msgid "Run analysis"
+msgstr "Avvia analisi"
+
+msgid "Save settings"
+msgstr "Salva impostazioni"
+
+msgid "Search"
+msgstr "Cerca"
+
+msgid "Search post by title…"
+msgstr "Cerca articolo per titolo…"
+
+msgid "Select a post"
+msgstr "Seleziona un articolo"
+
+msgid "Spelling"
+msgstr "Ortografia"
+
+msgid "Spelling Corrector"
+msgstr "Correttore ortografico"
+
+msgid "Spelling corrector"
+msgstr "Correttore ortografico"
+
+msgid "Stop"
+msgstr "Interrompi"
+
+msgid "TL;DR Generator"
+msgstr "Generatore TL;DR"
+
+msgid "Test connection"
+msgstr "Testa connessione"
+
+msgid "Text Readability"
+msgstr "Leggibilità del testo"
+
+msgid "Tokens IN (est.)"
+msgstr "Token IN (stima)"
+
+msgid "Tokens OUT (est.)"
+msgstr "Token OUT (stima)"
+
+msgid "Total cost since last reset"
+msgstr "Costo totale dall'ultimo azzeramento"
+
+msgid "errors"
+msgstr "errori"

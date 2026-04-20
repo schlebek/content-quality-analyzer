@@ -1,0 +1,225 @@
+# Content Quality Analyzer — translation template
+# Copyright (C) 2024 Stanisław Chlebek
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Quality Analyzer 1.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/schlebek/content-quality-analyzer/issues\n"
+"POT-Creation-Date: 2026-04-20T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"X-Generator: generate.js\n"
+
+msgid "%s ago"
+msgstr ""
+
+msgid "— load models →"
+msgstr ""
+
+msgid "AI-Friendly"
+msgstr ""
+
+msgid "AI-Friendly Check"
+msgstr ""
+
+msgid "Analyze all"
+msgstr ""
+
+msgid "Analyze headings"
+msgstr ""
+
+msgid "Analyze post"
+msgstr ""
+
+msgid "Analyze readability"
+msgstr ""
+
+msgid "Analyzing…"
+msgstr ""
+
+msgid "Analysis"
+msgstr ""
+
+msgid "Analysis History"
+msgstr ""
+
+msgid "API Configuration"
+msgstr ""
+
+msgid "API Costs"
+msgstr ""
+
+msgid "API Key"
+msgstr ""
+
+msgid "All types"
+msgstr ""
+
+msgid "Apply selected fixes"
+msgstr ""
+
+msgid "Batch analysis"
+msgstr ""
+
+msgid "Check AI-Friendly"
+msgstr ""
+
+msgid "Check spelling"
+msgstr ""
+
+msgid "Click \"Test connection\" to load available models."
+msgstr ""
+
+msgid "Content Analyzer"
+msgstr ""
+
+msgid "Content Quality Analyzer"
+msgstr ""
+
+msgid "Cost / analysis"
+msgstr ""
+
+msgid "Dismiss all"
+msgstr ""
+
+msgid "Estimated analysis costs (Gemini Flash)"
+msgstr ""
+
+msgid "First configure your API key in the %s tab."
+msgstr ""
+
+msgid "Flash = cheaper | Pro = better for long analyses"
+msgstr ""
+
+msgid "Generate TL;DR"
+msgstr ""
+
+msgid "Gemini Model"
+msgstr ""
+
+msgid "Get your API key from %s."
+msgstr ""
+
+msgid "Google Gemini API Configuration"
+msgstr ""
+
+msgid "Heading Structure"
+msgstr ""
+
+msgid "Hint (optional): e.g. simplify sentences, add examples…"
+msgstr ""
+
+msgid "Insufficient permissions."
+msgstr ""
+
+msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
+msgstr ""
+
+msgid "Load list"
+msgstr ""
+
+msgid "Load posts"
+msgstr ""
+
+msgid "Missing API key or model. Please configure the plugin."
+msgstr ""
+
+msgid "No content to analyze."
+msgstr ""
+
+msgid "No content to check."
+msgstr ""
+
+msgid "No content to summarize."
+msgstr ""
+
+msgid "No errors found. Text looks correct."
+msgstr ""
+
+msgid "No fragment to rewrite."
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
+msgid "Paste a text fragment to rewrite:"
+msgstr ""
+
+msgid "Paste text fragment…"
+msgstr ""
+
+msgid "Please provide an API key."
+msgstr ""
+
+msgid "Post types to analyze"
+msgstr ""
+
+msgid "Posts overview"
+msgstr ""
+
+msgid "Preparing…"
+msgstr ""
+
+msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
+msgstr ""
+
+msgid "Readability"
+msgstr ""
+
+msgid "Reset counter"
+msgstr ""
+
+msgid "Rewrite Fragment"
+msgstr ""
+
+msgid "Rewrite fragment"
+msgstr ""
+
+msgid "Run analysis"
+msgstr ""
+
+msgid "Save settings"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search post by title…"
+msgstr ""
+
+msgid "Select a post"
+msgstr ""
+
+msgid "Spelling"
+msgstr ""
+
+msgid "Spelling Corrector"
+msgstr ""
+
+msgid "Spelling corrector"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "TL;DR Generator"
+msgstr ""
+
+msgid "Test connection"
+msgstr ""
+
+msgid "Text Readability"
+msgstr ""
+
+msgid "Tokens IN (est.)"
+msgstr ""
+
+msgid "Tokens OUT (est.)"
+msgstr ""
+
+msgid "Total cost since last reset"
+msgstr ""
+
+msgid "errors"
+msgstr ""

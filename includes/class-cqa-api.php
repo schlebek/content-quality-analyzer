@@ -33,13 +33,13 @@ class CQA_API {
 		) );
 
 		if ( is_wp_error( $resp ) ) {
-			return [ 'error' => 'Błąd połączenia: ' . $resp->get_error_message() ];
+			return array( 'error' => 'Connection error: ' . $resp->get_error_message() );
 		}
 
 		$data = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( isset( $data['error'] ) ) {
-			$msg = sanitize_text_field( $data['error']['message'] ?? 'Nieznany błąd' );
+			$msg = sanitize_text_field( $data['error']['message'] ?? 'Unknown error' );
 			$msg = preg_replace( '/key[=:\s]+\S+/i', 'key=[HIDDEN]', $msg );
 			return [ 'error' => 'API: ' . $msg ];
 		}
@@ -63,7 +63,7 @@ class CQA_API {
 		$parsed   = json_decode( $json_str, true );
 
 		if ( ! $parsed ) {
-			return [ 'error' => 'Niepoprawna odpowiedź JSON z API.' ];
+			return array( 'error' => 'Invalid JSON response from API.' );
 		}
 
 		return $parsed;

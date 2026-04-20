@@ -3,7 +3,7 @@ Contributors: schlebek
 Tags: content, ai, spelling, readability, seo
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -73,15 +73,16 @@ The plugin tracks cumulative token usage and displays an estimated USD cost on t
 
 == Changelog ==
 
-= 1.2.0 =
+= 1.3.0 =
+* Added translations: German, French, Spanish, Italian, Portuguese (Brazil), Russian, Ukrainian, Dutch, Czech.
+* Fixed hardcoded Polish strings in AJAX responses — all translatable via i18n.
+* Fixed hardcoded Polish error messages in API class — replaced with English source strings.
 * WP.org compliance: replaced anonymous closures in hooks with named functions.
 * WP.org compliance: removed `sslverify => false` from all HTTP requests.
 * WP.org compliance: added `sanitize_callback` to all `register_setting()` calls.
 * WP.org compliance: replaced `@set_time_limit()` with `function_exists()` guard.
 * Added `register_uninstall_hook()` for clean option removal on plugin delete.
-* Added `register_activation_hook()` setting default options on first activation.
 * Added full i18n support with `load_plugin_textdomain()` and locale fallback.
-* Fixed version constant mismatch between plugin header and `CQA_VERSION`.
 
 = 1.1.0 =
 * Added Analysis History tracking readability and AI-friendly scores over time.
@@ -98,5 +99,5 @@ The plugin tracks cumulative token usage and displays an estimated USD cost on t
 
 == Upgrade Notice ==
 
-= 1.2.0 =
-Security and compliance update — removes insecure HTTP options and adds clean uninstall support. Recommended for all users.
+= 1.3.0 =
+Adds 9 language translations and fixes all remaining WP.org compliance issues. Recommended for all users.

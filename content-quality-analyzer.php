@@ -3,7 +3,7 @@
  * Plugin Name:       Content Quality Analyzer
  * Plugin URI:        https://github.com/schlebek/content-quality-analyzer
  * Description:       AI-powered spelling corrector, readability analysis, and AI-friendly content verification powered by Google Gemini.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            Stanisław Chlebek
  * Author URI:        https://github.com/schlebek
  * Text Domain:       content-quality-analyzer
@@ -16,7 +16,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'CQA_VERSION',    '1.2.0' );
+define( 'CQA_VERSION',    '1.3.0' );
 define( 'CQA_PLUGIN_FILE', __FILE__ );
 define( 'CQA_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CQA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

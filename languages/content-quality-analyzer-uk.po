@@ -1,0 +1,226 @@
+# Translation of content-quality-analyzer for uk
+# Copyright (C) 2024 Stanisław Chlebek
+# This file is distributed under the same license as the content-quality-analyzer plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Quality Analyzer 1.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/schlebek/content-quality-analyzer/issues\n"
+"POT-Creation-Date: 2026-04-20T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"X-Generator: generate.js\n"
+
+msgid "%s ago"
+msgstr "%s тому"
+
+msgid "— load models →"
+msgstr "— завантажити моделі →"
+
+msgid "AI-Friendly"
+msgstr "Дружній до ШІ"
+
+msgid "AI-Friendly Check"
+msgstr "Перевірка дружності до ШІ"
+
+msgid "Analyze all"
+msgstr "Аналізувати все"
+
+msgid "Analyze headings"
+msgstr "Аналізувати заголовки"
+
+msgid "Analyze post"
+msgstr "Аналізувати запис"
+
+msgid "Analyze readability"
+msgstr "Аналізувати читабельність"
+
+msgid "Analyzing…"
+msgstr "Аналізується…"
+
+msgid "Analysis"
+msgstr "Аналіз"
+
+msgid "Analysis History"
+msgstr "Історія аналізів"
+
+msgid "API Configuration"
+msgstr "Конфігурація API"
+
+msgid "API Costs"
+msgstr "Витрати API"
+
+msgid "API Key"
+msgstr "Ключ API"
+
+msgid "All types"
+msgstr "Всі типи"
+
+msgid "Apply selected fixes"
+msgstr "Застосувати вибрані виправлення"
+
+msgid "Batch analysis"
+msgstr "Пакетний аналіз"
+
+msgid "Check AI-Friendly"
+msgstr "Перевірити дружність до ШІ"
+
+msgid "Check spelling"
+msgstr "Перевірити правопис"
+
+msgid "Click \"Test connection\" to load available models."
+msgstr "Натисніть «Перевірити з'єднання», щоб завантажити доступні моделі."
+
+msgid "Content Analyzer"
+msgstr "Аналізатор контенту"
+
+msgid "Content Quality Analyzer"
+msgstr "Аналізатор якості контенту"
+
+msgid "Cost / analysis"
+msgstr "Вартість / аналіз"
+
+msgid "Dismiss all"
+msgstr "Відхилити все"
+
+msgid "Estimated analysis costs (Gemini Flash)"
+msgstr "Приблизні витрати на аналіз (Gemini Flash)"
+
+msgid "First configure your API key in the %s tab."
+msgstr "Спочатку налаштуйте ключ API на вкладці %s."
+
+msgid "Flash = cheaper | Pro = better for long analyses"
+msgstr "Flash = дешевше | Pro = краще для довгих аналізів"
+
+msgid "Generate TL;DR"
+msgstr "Згенерувати TL;DR"
+
+msgid "Gemini Model"
+msgstr "Модель Gemini"
+
+msgid "Get your API key from %s."
+msgstr "Отримайте ключ API з %s."
+
+msgid "Google Gemini API Configuration"
+msgstr "Конфігурація API Google Gemini"
+
+msgid "Heading Structure"
+msgstr "Структура заголовків"
+
+msgid "Hint (optional): e.g. simplify sentences, add examples…"
+msgstr "Підказка (необов'язково): напр. спростити речення, додати приклади…"
+
+msgid "Insufficient permissions."
+msgstr "Недостатньо прав."
+
+msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
+msgstr "Невірний ключ або немає доступних моделей — перевірте права ключа в Google AI Studio."
+
+msgid "Load list"
+msgstr "Завантажити список"
+
+msgid "Load posts"
+msgstr "Завантажити записи"
+
+msgid "Missing API key or model. Please configure the plugin."
+msgstr "Відсутній ключ API або модель. Налаштуйте плагін."
+
+msgid "No content to analyze."
+msgstr "Немає контенту для аналізу."
+
+msgid "No content to check."
+msgstr "Немає контенту для перевірки."
+
+msgid "No content to summarize."
+msgstr "Немає контенту для стислого викладу."
+
+msgid "No errors found. Text looks correct."
+msgstr "Помилок не знайдено. Текст виглядає правильно."
+
+msgid "No fragment to rewrite."
+msgstr "Немає фрагменту для переробки."
+
+msgid "Overview"
+msgstr "Огляд"
+
+msgid "Paste a text fragment to rewrite:"
+msgstr "Вставте фрагмент тексту для переробки:"
+
+msgid "Paste text fragment…"
+msgstr "Вставити фрагмент тексту…"
+
+msgid "Please provide an API key."
+msgstr "Будь ласка, вкажіть ключ API."
+
+msgid "Post types to analyze"
+msgstr "Типи записів для аналізу"
+
+msgid "Posts overview"
+msgstr "Огляд записів"
+
+msgid "Preparing…"
+msgstr "Підготовка…"
+
+msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
+msgstr "Ціни для Gemini 2.0 Flash: $0,075/1М вх., $0,30/1М вих. (безкоштовний рівень: без оплати до ліміту)"
+
+msgid "Readability"
+msgstr "Читабельність"
+
+msgid "Reset counter"
+msgstr "Скинути лічильник"
+
+msgid "Rewrite Fragment"
+msgstr "Переробити фрагмент"
+
+msgid "Rewrite fragment"
+msgstr "Переробити фрагмент"
+
+msgid "Run analysis"
+msgstr "Запустити аналіз"
+
+msgid "Save settings"
+msgstr "Зберегти налаштування"
+
+msgid "Search"
+msgstr "Пошук"
+
+msgid "Search post by title…"
+msgstr "Шукати запис за заголовком…"
+
+msgid "Select a post"
+msgstr "Вибрати запис"
+
+msgid "Spelling"
+msgstr "Правопис"
+
+msgid "Spelling Corrector"
+msgstr "Орфографічний коректор"
+
+msgid "Spelling corrector"
+msgstr "Орфографічний коректор"
+
+msgid "Stop"
+msgstr "Зупинити"
+
+msgid "TL;DR Generator"
+msgstr "Генератор TL;DR"
+
+msgid "Test connection"
+msgstr "Перевірити з'єднання"
+
+msgid "Text Readability"
+msgstr "Читабельність тексту"
+
+msgid "Tokens IN (est.)"
+msgstr "Токени вх. (оцінка)"
+
+msgid "Tokens OUT (est.)"
+msgstr "Токени вих. (оцінка)"
+
+msgid "Total cost since last reset"
+msgstr "Загальна вартість з моменту останнього скидання"
+
+msgid "errors"
+msgstr "помилок"

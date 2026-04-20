@@ -1,0 +1,226 @@
+# Translation of content-quality-analyzer for cs_CZ
+# Copyright (C) 2024 Stanisław Chlebek
+# This file is distributed under the same license as the content-quality-analyzer plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Content Quality Analyzer 1.2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/schlebek/content-quality-analyzer/issues\n"
+"POT-Creation-Date: 2026-04-20T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs-CZ\n"
+"X-Generator: generate.js\n"
+
+msgid "%s ago"
+msgstr "před %s"
+
+msgid "— load models →"
+msgstr "— načíst modely →"
+
+msgid "AI-Friendly"
+msgstr "Přívětivý pro AI"
+
+msgid "AI-Friendly Check"
+msgstr "Kontrola přívětivosti pro AI"
+
+msgid "Analyze all"
+msgstr "Analyzovat vše"
+
+msgid "Analyze headings"
+msgstr "Analyzovat nadpisy"
+
+msgid "Analyze post"
+msgstr "Analyzovat příspěvek"
+
+msgid "Analyze readability"
+msgstr "Analyzovat čitelnost"
+
+msgid "Analyzing…"
+msgstr "Analyzuji…"
+
+msgid "Analysis"
+msgstr "Analýza"
+
+msgid "Analysis History"
+msgstr "Historie analýz"
+
+msgid "API Configuration"
+msgstr "Konfigurace API"
+
+msgid "API Costs"
+msgstr "Náklady API"
+
+msgid "API Key"
+msgstr "Klíč API"
+
+msgid "All types"
+msgstr "Všechny typy"
+
+msgid "Apply selected fixes"
+msgstr "Použít vybrané opravy"
+
+msgid "Batch analysis"
+msgstr "Hromadná analýza"
+
+msgid "Check AI-Friendly"
+msgstr "Zkontrolovat přívětivost pro AI"
+
+msgid "Check spelling"
+msgstr "Zkontrolovat pravopis"
+
+msgid "Click \"Test connection\" to load available models."
+msgstr "Klikněte na «Otestovat připojení» pro načtení dostupných modelů."
+
+msgid "Content Analyzer"
+msgstr "Analyzátor obsahu"
+
+msgid "Content Quality Analyzer"
+msgstr "Analyzátor kvality obsahu"
+
+msgid "Cost / analysis"
+msgstr "Náklady / analýza"
+
+msgid "Dismiss all"
+msgstr "Odmítnout vše"
+
+msgid "Estimated analysis costs (Gemini Flash)"
+msgstr "Odhadované náklady na analýzu (Gemini Flash)"
+
+msgid "First configure your API key in the %s tab."
+msgstr "Nejprve nakonfigurujte klíč API na kartě %s."
+
+msgid "Flash = cheaper | Pro = better for long analyses"
+msgstr "Flash = levnější | Pro = lepší pro dlouhé analýzy"
+
+msgid "Generate TL;DR"
+msgstr "Generovat TL;DR"
+
+msgid "Gemini Model"
+msgstr "Model Gemini"
+
+msgid "Get your API key from %s."
+msgstr "Získejte klíč API z %s."
+
+msgid "Google Gemini API Configuration"
+msgstr "Konfigurace API Google Gemini"
+
+msgid "Heading Structure"
+msgstr "Struktura nadpisů"
+
+msgid "Hint (optional): e.g. simplify sentences, add examples…"
+msgstr "Nápověda (volitelné): např. zjednodušit věty, přidat příklady…"
+
+msgid "Insufficient permissions."
+msgstr "Nedostatečná oprávnění."
+
+msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
+msgstr "Neplatný klíč nebo žádné dostupné modely — zkontrolujte oprávnění klíče v Google AI Studio."
+
+msgid "Load list"
+msgstr "Načíst seznam"
+
+msgid "Load posts"
+msgstr "Načíst příspěvky"
+
+msgid "Missing API key or model. Please configure the plugin."
+msgstr "Chybí klíč API nebo model. Prosím nakonfigurujte plugin."
+
+msgid "No content to analyze."
+msgstr "Žádný obsah k analýze."
+
+msgid "No content to check."
+msgstr "Žádný obsah ke kontrole."
+
+msgid "No content to summarize."
+msgstr "Žádný obsah k shrnutí."
+
+msgid "No errors found. Text looks correct."
+msgstr "Žádné chyby nenalezeny. Text vypadá správně."
+
+msgid "No fragment to rewrite."
+msgstr "Žádný fragment k přepsání."
+
+msgid "Overview"
+msgstr "Přehled"
+
+msgid "Paste a text fragment to rewrite:"
+msgstr "Vložte textový fragment k přepsání:"
+
+msgid "Paste text fragment…"
+msgstr "Vložit textový fragment…"
+
+msgid "Please provide an API key."
+msgstr "Prosím zadejte klíč API."
+
+msgid "Post types to analyze"
+msgstr "Typy příspěvků k analýze"
+
+msgid "Posts overview"
+msgstr "Přehled příspěvků"
+
+msgid "Preparing…"
+msgstr "Připravuji…"
+
+msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
+msgstr "Ceny pro Gemini 2.0 Flash: $0,075/1M IN, $0,30/1M OUT (bezplatná úroveň: bez poplatků do limitu)"
+
+msgid "Readability"
+msgstr "Čitelnost"
+
+msgid "Reset counter"
+msgstr "Resetovat počítadlo"
+
+msgid "Rewrite Fragment"
+msgstr "Přepsat fragment"
+
+msgid "Rewrite fragment"
+msgstr "Přepsat fragment"
+
+msgid "Run analysis"
+msgstr "Spustit analýzu"
+
+msgid "Save settings"
+msgstr "Uložit nastavení"
+
+msgid "Search"
+msgstr "Hledat"
+
+msgid "Search post by title…"
+msgstr "Hledat příspěvek podle názvu…"
+
+msgid "Select a post"
+msgstr "Vybrat příspěvek"
+
+msgid "Spelling"
+msgstr "Pravopis"
+
+msgid "Spelling Corrector"
+msgstr "Pravopisný korektor"
+
+msgid "Spelling corrector"
+msgstr "Pravopisný korektor"
+
+msgid "Stop"
+msgstr "Zastavit"
+
+msgid "TL;DR Generator"
+msgstr "Generátor TL;DR"
+
+msgid "Test connection"
+msgstr "Otestovat připojení"
+
+msgid "Text Readability"
+msgstr "Čitelnost textu"
+
+msgid "Tokens IN (est.)"
+msgstr "Tokeny IN (odhad)"
+
+msgid "Tokens OUT (est.)"
+msgstr "Tokeny OUT (odhad)"
+
+msgid "Total cost since last reset"
+msgstr "Celkové náklady od posledního resetování"
+
+msgid "errors"
+msgstr "chyb"

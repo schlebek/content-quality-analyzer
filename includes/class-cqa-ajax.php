@@ -413,9 +413,9 @@ class CQA_Ajax {
 				'url'        => get_permalink( $pid ),
 				'edit_url'   => get_edit_post_link( $pid, '' ),
 				'type'       => get_post_type( $pid ),
-				'spell_date' => $spell_d ? human_time_diff( (int) $spell_d ) . ' temu' : null,
-				'read_date'  => $read_d  ? human_time_diff( (int) $read_d )  . ' temu' : null,
-				'ai_date'    => $ai_d    ? human_time_diff( (int) $ai_d )    . ' temu' : null,
+				'spell_date' => $spell_d ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $spell_d ) ) : null,
+				'read_date'  => $read_d  ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $read_d ) )  : null,
+				'ai_date'    => $ai_d    ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $ai_d ) )    : null,
 				'read_score' => $read_data['score'] ?? null,
 				'read_grade' => $read_data['grade'] ?? null,
 				'ai_score'   => $ai_data['score']   ?? null,
@@ -476,9 +476,9 @@ class CQA_Ajax {
 				'ai_score'     => $ai_data    ? ( $ai_data['score']    ?? null ) : null,
 				'ai_grade'     => $ai_data    ? ( $ai_data['grade']    ?? null ) : null,
 				'spell_errors' => $spell_data ? count( $spell_data['spelling_errors'] ?? [] ) : null,
-				'read_date'    => $read_d  ? human_time_diff( (int) $read_d )  . ' temu' : null,
-				'ai_date'      => $ai_d    ? human_time_diff( (int) $ai_d )    . ' temu' : null,
-				'spell_date'   => $spell_d ? human_time_diff( (int) $spell_d ) . ' temu' : null,
+				'read_date'    => $read_d  ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $read_d ) )  : null,
+				'ai_date'      => $ai_d    ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $ai_d ) )    : null,
+				'spell_date'   => $spell_d ? sprintf( __( '%s ago', 'content-quality-analyzer' ), human_time_diff( (int) $spell_d ) ) : null,
 			];
 		}
 

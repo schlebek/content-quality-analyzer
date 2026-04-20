@@ -60,8 +60,14 @@ msgstr "Všechny typy"
 msgid "Apply selected fixes"
 msgstr "Použít vybrané opravy"
 
+msgid "Avg. sentence"
+msgstr "Pr. věta"
+
 msgid "Batch analysis"
 msgstr "Hromadná analýza"
+
+msgid "Cancel"
+msgstr "Zrušit"
 
 msgid "Check AI-Friendly"
 msgstr "Zkontrolovat přívětivost pro AI"
@@ -69,8 +75,35 @@ msgstr "Zkontrolovat přívětivost pro AI"
 msgid "Check spelling"
 msgstr "Zkontrolovat pravopis"
 
+msgid "Checking…"
+msgstr "Kontroluji…"
+
+msgid "Checking AI-Friendly…"
+msgstr "Kontrola přívětivosti pro AI…"
+
+msgid "Checking spelling…"
+msgstr "Kontrola pravopisu…"
+
+msgid "Analyzing readability…"
+msgstr "Analýza čitelnosti…"
+
 msgid "Click \"Test connection\" to load available models."
 msgstr "Klikněte na «Otestovat připojení» pro načtení dostupných modelů."
+
+msgid "Clarity"
+msgstr "Srozumitelnost"
+
+msgid "Complex words"
+msgstr "Složitá slova"
+
+msgid "Conciseness"
+msgstr "Stručnost"
+
+msgid "Connected! Models loaded."
+msgstr "Připojeno! Modely načteny."
+
+msgid "Connection error."
+msgstr "Chyba připojení."
 
 msgid "Content Analyzer"
 msgstr "Analyzátor obsahu"
@@ -78,17 +111,50 @@ msgstr "Analyzátor obsahu"
 msgid "Content Quality Analyzer"
 msgstr "Analyzátor kvality obsahu"
 
+msgid "Copied!"
+msgstr "Zkopírováno!"
+
+msgid "Copy"
+msgstr "Kopírovat"
+
+msgid "Copy TL;DR"
+msgstr "Kopírovat TL;DR"
+
+msgid "Copy all fixes"
+msgstr "Kopírovat všechny opravy"
+
 msgid "Cost / analysis"
 msgstr "Náklady / analýza"
+
+msgid "Cost: $"
+msgstr "Náklady: $"
+
+msgid "Date"
+msgstr "Datum"
 
 msgid "Dismiss all"
 msgstr "Odmítnout vše"
 
+msgid "Done!"
+msgstr "Hotovo!"
+
+msgid "Engagement"
+msgstr "Zapojení"
+
+msgid "Error: "
+msgstr "Chyba: "
+
 msgid "Estimated analysis costs (Gemini Flash)"
 msgstr "Odhadované náklady na analýzu (Gemini Flash)"
 
+msgid "Find"
+msgstr "Najít"
+
 msgid "First configure your API key in the %s tab."
 msgstr "Nejprve nakonfigurujte klíč API na kartě %s."
+
+msgid "Fix"
+msgstr "Opravit"
 
 msgid "Flash = cheaper | Pro = better for long analyses"
 msgstr "Flash = levnější | Pro = lepší pro dlouhé analýzy"
@@ -99,17 +165,29 @@ msgstr "Generovat TL;DR"
 msgid "Gemini Model"
 msgstr "Model Gemini"
 
+msgid "Generating…"
+msgstr "Generuji…"
+
 msgid "Get your API key from %s."
 msgstr "Získejte klíč API z %s."
 
 msgid "Google Gemini API Configuration"
 msgstr "Konfigurace API Google Gemini"
 
+msgid "H2/H3 headings"
+msgstr "Nadpisy H2/H3"
+
 msgid "Heading Structure"
 msgstr "Struktura nadpisů"
 
+msgid "Heading structure is correct."
+msgstr "Struktura nadpisů je správná."
+
 msgid "Hint (optional): e.g. simplify sentences, add examples…"
 msgstr "Nápověda (volitelné): např. zjednodušit věty, přidat příklady…"
+
+msgid "Improvement priorities"
+msgstr "Priority zlepšení"
 
 msgid "Insufficient permissions."
 msgstr "Nedostatečná oprávnění."
@@ -117,14 +195,47 @@ msgstr "Nedostatečná oprávnění."
 msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
 msgstr "Neplatný klíč nebo žádné dostupné modely — zkontrolujte oprávnění klíče v Google AI Studio."
 
+msgid "Issues"
+msgstr "Problémy"
+
+msgid "Jargon"
+msgstr "Žargon"
+
+msgid "Key points"
+msgstr "Klíčové body"
+
 msgid "Load list"
 msgstr "Načíst seznam"
 
 msgid "Load posts"
 msgstr "Načíst příspěvky"
 
+msgid "Loading…"
+msgstr "Načítám…"
+
+msgid "Logical flow"
+msgstr "Logický tok"
+
+msgid "Long sentences"
+msgstr "Dlouhé věty"
+
 msgid "Missing API key or model. Please configure the plugin."
 msgstr "Chybí klíč API nebo model. Prosím nakonfigurujte plugin."
+
+msgid "No H1 heading."
+msgstr "Žádný nadpis H1."
+
+msgid "No H2 headings — add sections."
+msgstr "Žádné nadpisy H2 — přidejte sekce."
+
+msgid "No analysis history."
+msgstr "Žádná historie analýz."
+
+msgid "No content."
+msgstr "Žádný obsah."
+
+msgid "No content to analyze. Please add content to the post."
+msgstr "Žádný obsah k analýze. Přidejte obsah do příspěvku."
 
 msgid "No content to analyze."
 msgstr "Žádný obsah k analýze."
@@ -141,8 +252,44 @@ msgstr "Žádné chyby nenalezeny. Text vypadá správně."
 msgid "No fragment to rewrite."
 msgstr "Žádný fragment k přepsání."
 
+msgid "No headings found in content."
+msgstr "V obsahu nebyly nalezeny žádné nadpisy."
+
+msgid "No models available"
+msgstr "Žádné dostupné modely"
+
+msgid "No posts."
+msgstr "Žádné příspěvky."
+
+msgid "No posts found."
+msgstr "Žádné příspěvky nenalezeny."
+
+msgid "No spelling errors found."
+msgstr "Žádné pravopisné chyby nenalezeny."
+
+msgid "Not found"
+msgstr "Nenalezeno"
+
+msgid "(no title)"
+msgstr "(bez názvu)"
+
+msgid "(no text)"
+msgstr "(bez textu)"
+
 msgid "Overview"
 msgstr "Přehled"
+
+msgid "Page %1$d of %2$d"
+msgstr "Stránka %1$d z %2$d"
+
+msgid "Para. structure"
+msgstr "Struk. odstavce"
+
+msgid "Paragraphs"
+msgstr "Odstavce"
+
+msgid "Passive voice"
+msgstr "Pasivní hlas"
 
 msgid "Paste a text fragment to rewrite:"
 msgstr "Vložte textový fragment k přepsání:"
@@ -150,8 +297,14 @@ msgstr "Vložte textový fragment k přepsání:"
 msgid "Paste text fragment…"
 msgstr "Vložit textový fragment…"
 
+msgid "Please enter an API key."
+msgstr "Prosím zadejte klíč API."
+
 msgid "Please provide an API key."
 msgstr "Prosím zadejte klíč API."
+
+msgid "Please select at least one type."
+msgstr "Vyberte alespoň jeden typ."
 
 msgid "Post types to analyze"
 msgstr "Typy příspěvků k analýze"
@@ -162,11 +315,20 @@ msgstr "Přehled příspěvků"
 msgid "Preparing…"
 msgstr "Připravuji…"
 
+msgid "Preview"
+msgstr "Náhled"
+
 msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
 msgstr "Ceny pro Gemini 2.0 Flash: $0,075/1M IN, $0,30/1M OUT (bezplatná úroveň: bez poplatků do limitu)"
 
 msgid "Readability"
 msgstr "Čitelnost"
+
+msgid "Reading time:"
+msgstr "Doba čtení:"
+
+msgid "Reset cost counter?"
+msgstr "Resetovat počítadlo nákladů?"
 
 msgid "Reset counter"
 msgstr "Resetovat počítadlo"
@@ -177,8 +339,14 @@ msgstr "Přepsat fragment"
 msgid "Rewrite fragment"
 msgstr "Přepsat fragment"
 
+msgid "Rewriting…"
+msgstr "Přepisuji…"
+
 msgid "Run analysis"
 msgstr "Spustit analýzu"
+
+msgid "AI-Friendly"
+msgstr "Přívětivý pro AI"
 
 msgid "Save settings"
 msgstr "Uložit nastavení"
@@ -189,8 +357,26 @@ msgstr "Hledat"
 msgid "Search post by title…"
 msgstr "Hledat příspěvek podle názvu…"
 
+msgid "Searching…"
+msgstr "Hledám…"
+
 msgid "Select a post"
 msgstr "Vybrat příspěvek"
+
+msgid "Sent. variety"
+msgstr "Varieta vět"
+
+msgid "Sentences"
+msgstr "Věty"
+
+msgid "Settings →"
+msgstr "Nastavení →"
+
+msgid "Short sentences"
+msgstr "Krátké věty"
+
+msgid "Skipped level after"
+msgstr "Přeskočená úroveň po"
 
 msgid "Spelling"
 msgstr "Pravopis"
@@ -201,8 +387,17 @@ msgstr "Pravopisný korektor"
 msgid "Spelling corrector"
 msgstr "Pravopisný korektor"
 
+msgid "Spelling errors"
+msgstr "Pravopisné chyby"
+
 msgid "Stop"
 msgstr "Zastavit"
+
+msgid "Stopped by user."
+msgstr "Zastaveno uživatelem."
+
+msgid "Strengths"
+msgstr "Silné stránky"
 
 msgid "TL;DR Generator"
 msgstr "Generátor TL;DR"
@@ -210,8 +405,14 @@ msgstr "Generátor TL;DR"
 msgid "Test connection"
 msgstr "Otestovat připojení"
 
+msgid "Testing…"
+msgstr "Testuji…"
+
 msgid "Text Readability"
 msgstr "Čitelnost textu"
+
+msgid "Title"
+msgstr "Název"
 
 msgid "Tokens IN (est.)"
 msgstr "Tokeny IN (odhad)"
@@ -219,8 +420,62 @@ msgstr "Tokeny IN (odhad)"
 msgid "Tokens OUT (est.)"
 msgstr "Tokeny OUT (odhad)"
 
+msgid "Top improvements"
+msgstr "Hlavní zlepšení"
+
 msgid "Total cost since last reset"
 msgstr "Celkové náklady od posledního resetování"
 
+msgid "Type"
+msgstr "Typ"
+
+msgid "Unknown error"
+msgstr "Neznámá chyba"
+
+msgid "Version"
+msgstr "Verze"
+
+msgid "Vocabulary"
+msgstr "Slovní zásoba"
+
+msgid "What was improved:"
+msgstr "Co bylo zlepšeno:"
+
+msgid "Words"
+msgstr "Slova"
+
+msgid "Yes, reset"
+msgstr "Ano, resetovat"
+
+msgid "actions"
+msgstr "akce"
+
 msgid "errors"
 msgstr "chyb"
+
+msgid "min"
+msgstr "min"
+
+msgid "posts"
+msgstr "příspěvků"
+
+msgid "readability"
+msgstr "čitelnost"
+
+msgid "spelling"
+msgstr "pravopis"
+
+msgid "words"
+msgstr "slov"
+
+msgid "0 errors"
+msgstr "0 chyb"
+
+msgid "Actions"
+msgstr "Akce"
+
+msgid "✓ No errors"
+msgstr "✓ Žádné chyby"
+
+msgid "More than one H1"
+msgstr "Více než jeden H1"

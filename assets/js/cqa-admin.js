@@ -2,8 +2,9 @@
     'use strict';
 
     var admin = window.cqaAdmin || {};
-    var selectedPostId  = null;
-    var selectedTitle   = '';
+    var i18n  = admin.i18n || {};
+    var selectedPostId = null;
+    var selectedTitle  = '';
 
     /* ── Tab navigation ───────────────────────────────────── */
 
@@ -16,20 +17,51 @@
         $(target).addClass('active');
     });
 
+    /* ── Helpers ──────────────────────────────────────────── */
+
+    function esc(str) {
+        return $('<div>').text(String(str || '')).html();
+    }
+
+    function gradeColor(score) {
+        if (score >= 80) return '#16a34a';
+        if (score >= 65) return '#ca8a04';
+        if (score >= 45) return '#ea580c';
+        return '#dc2626';
+    }
+
+    function scoreCircle(score, grade, color) {
+        return '<div style="display:inline-flex; align-items:center; gap:12px; margin-bottom:12px;">'
+            + '<div class="cqa-score-ring" style="--cqa-ring:' + color + '; width:60px; height:60px; border-width:4px;">'
+            + '<span class="cqa-score-value" style="font-size:18px;">' + score + '</span>'
+            + '<span class="cqa-score-suffix">/100</span>'
+            + '</div>'
+            + '<div><span style="font-size:18px; font-weight:700; color:' + color + ';">' + esc(grade) + '</span></div>'
+            + '</div>';
+    }
+
+    function scorePill(score, grade) {
+        if (score === null || score === undefined) return '';
+        var cls = score >= 80 ? 'cqa-score-pill--green' : (score >= 60 ? 'cqa-score-pill--yellow' : 'cqa-score-pill--red');
+        return '<span class="cqa-score-pill ' + cls + '">' + score + ' ' + esc(grade || '') + '</span>';
+    }
+
     /* ═══════════════════════════════════════════════════════
-       OVERVIEW TAB
+       OVERVIEW TAB — with pagination
     ═══════════════════════════════════════════════════════ */
 
     var ovSortCol = 'title';
     var ovSortAsc = true;
     var ovData    = [];
+    var ovPage    = 1;
+    var OV_PER_PAGE = 25;
 
     $(document).on('click', '#cqa-ov-load-btn', function () {
         var $btn    = $(this);
         var $status = $('#cqa-ov-status');
         var type    = $('#cqa-ov-type').val();
 
-        $btn.prop('disabled', true).text('Ładuję…');
+        $btn.prop('disabled', true).text(i18n.loading || 'Loading…');
         $status.text('');
         $('#cqa-ov-table-wrap').html('');
 
@@ -38,23 +70,24 @@
             nonce:     admin.nonce,
             post_type: type,
         }, function (res) {
-            $btn.prop('disabled', false).text('📋 Załaduj listę');
+            $btn.prop('disabled', false).text('📋 ' + ($('#cqa-ov-load-btn').data('label') || 'Load list'));
             if (!res.success) {
-                $status.text('Błąd: ' + (res.data || 'nieznany'));
+                $status.text((i18n.errPrefix || 'Error: ') + (res.data || i18n.unknownError || 'Unknown error'));
                 return;
             }
             ovData = res.data || [];
-            $status.text(ovData.length + ' wpisów');
+            ovPage = 1;
+            $status.text(ovData.length + ' ' + (i18n.posts || 'posts'));
             renderOverviewTable();
         }).fail(function () {
-            $btn.prop('disabled', false).text('📋 Załaduj listę');
-            $status.text('Błąd połączenia.');
+            $btn.prop('disabled', false).text('📋 ' + ($('#cqa-ov-load-btn').data('label') || 'Load list'));
+            $status.text(i18n.connectionError || 'Connection error.');
         });
     });
 
     function renderOverviewTable() {
         if (!ovData.length) {
-            $('#cqa-ov-table-wrap').html('<p style="color:#94a3b8; font-size:13px;">Brak wpisów.</p>');
+            $('#cqa-ov-table-wrap').html('<p style="color:#94a3b8; font-size:13px;">' + (i18n.noPosts || 'No posts.') + '</p>');
             return;
         }
 
@@ -66,6 +99,11 @@
             if (typeof av === 'string') return ovSortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
             return ovSortAsc ? av - bv : bv - av;
         });
+
+        var totalPages = Math.ceil(sorted.length / OV_PER_PAGE);
+        if (ovPage > totalPages) ovPage = totalPages;
+        var start  = (ovPage - 1) * OV_PER_PAGE;
+        var paged  = sorted.slice(start, start + OV_PER_PAGE);
 
         function th(col, label) {
             var arrow = ovSortCol === col ? (ovSortAsc ? ' ▲' : ' ▼') : '';
@@ -81,15 +119,15 @@
         var html = '<div style="overflow-x:auto;">'
             + '<table class="widefat cqa-ov-table" style="font-size:12px;">'
             + '<thead><tr>'
-            + th('title', 'Tytuł')
-            + th('type',  'Typ')
-            + th('spell_errors', '🔤 Błędy')
-            + th('read_score',   '📊 Czytelność')
-            + th('ai_score',     '🤖 AI-Friendly')
-            + '<th>Akcje</th>'
+            + th('title',       i18n.colTitle    || 'Title')
+            + th('type',        i18n.colType     || 'Type')
+            + th('spell_errors','🔤 ' + (i18n.errorsLabel || 'Errors'))
+            + th('read_score',  '📊 ' + (i18n.histRead || 'Readability'))
+            + th('ai_score',    '🤖 AI-Friendly')
+            + '<th>' + (i18n.colActions || 'Actions') + '</th>'
             + '</tr></thead><tbody>';
 
-        $.each(sorted, function (i, p) {
+        $.each(paged, function (i, p) {
             var spellCell;
             if (p.spell_errors === null || p.spell_errors === undefined) {
                 spellCell = '<td style="color:#94a3b8;">—</td>';
@@ -99,18 +137,29 @@
             }
 
             html += '<tr>'
-                + '<td><a href="' + esc(p.edit_url || '#') + '">' + esc(p.title || '(bez tytułu)') + '</a></td>'
+                + '<td><a href="' + esc(p.edit_url || '#') + '">' + esc(p.title || (i18n.noTitle || '(no title)')) + '</a></td>'
                 + '<td style="color:#64748b;">' + esc(p.type) + '</td>'
                 + spellCell
                 + scoreCell(p.read_score, p.read_grade)
                 + scoreCell(p.ai_score, p.ai_grade)
                 + '<td style="white-space:nowrap;">'
-                + '<a href="' + esc(p.url || '#') + '" target="_blank" rel="noopener" style="font-size:11px; margin-right:6px;">↗ Podgląd</a>'
+                + '<a href="' + esc(p.url || '#') + '" target="_blank" rel="noopener" style="font-size:11px; margin-right:6px;">↗ ' + (i18n.preview || 'Preview') + '</a>'
                 + '</td>'
                 + '</tr>';
         });
 
         html += '</tbody></table></div>';
+
+        if (totalPages > 1) {
+            var pageLabel = (i18n.pageOf || 'Page %1$d of %2$d')
+                .replace('%1$d', ovPage).replace('%2$d', totalPages);
+            html += '<div class="cqa-pagination">'
+                + '<button class="button cqa-pagination-btn" id="cqa-ov-prev" ' + (ovPage <= 1 ? 'disabled' : '') + '>‹</button>'
+                + '<span class="cqa-pagination-info">' + esc(pageLabel) + '</span>'
+                + '<button class="button cqa-pagination-btn" id="cqa-ov-next" ' + (ovPage >= totalPages ? 'disabled' : '') + '>›</button>'
+                + '</div>';
+        }
+
         $('#cqa-ov-table-wrap').html(html);
     }
 
@@ -122,7 +171,17 @@
             ovSortCol = col;
             ovSortAsc = true;
         }
+        ovPage = 1;
         renderOverviewTable();
+    });
+
+    $(document).on('click', '#cqa-ov-prev', function () {
+        if (ovPage > 1) { ovPage--; renderOverviewTable(); }
+    });
+
+    $(document).on('click', '#cqa-ov-next', function () {
+        var totalPages = Math.ceil(ovData.length / OV_PER_PAGE);
+        if (ovPage < totalPages) { ovPage++; renderOverviewTable(); }
     });
 
     /* ═══════════════════════════════════════════════════════
@@ -142,24 +201,24 @@
         });
 
         if (!types.length) {
-            $status.text('Zaznacz przynajmniej jeden typ.').css('color', '#dc2626');
+            $status.text(i18n.selectOneType || 'Please select at least one type.').css('color', '#dc2626');
             return;
         }
 
-        $btn.prop('disabled', true).text('Ładuję…');
+        $btn.prop('disabled', true).text(i18n.loading || 'Loading…');
         $status.text('').css('color', '');
 
         var postData = { action: 'cqa_overview_posts', nonce: admin.nonce };
         $.each(types, function (i, t) { postData['post_types[' + i + ']'] = t; });
 
         $.post(admin.ajaxUrl, postData, function (res) {
-            $btn.prop('disabled', false).text('📋 Załaduj wpisy');
+            $btn.prop('disabled', false).text('📋 ' + ($('#cqa-batch-load-btn').data('label') || 'Load posts'));
             if (!res.success) {
-                $status.text('Błąd: ' + (res.data || 'nieznany')).css('color', '#dc2626');
+                $status.text((i18n.errPrefix || 'Error: ') + (res.data || i18n.unknownError || 'Unknown error')).css('color', '#dc2626');
                 return;
             }
             var posts = res.data || [];
-            $status.text(posts.length + ' wpisów').css('color', '#64748b');
+            $status.text(posts.length + ' ' + (i18n.posts || 'posts')).css('color', '#64748b');
 
             batchQueue = posts;
 
@@ -167,19 +226,19 @@
             $.each(posts, function (i, p) {
                 listHtml += '<div class="cqa-batch-post-item">'
                     + '<span class="cqa-batch-num">' + (i + 1) + '.</span>'
-                    + '<span class="cqa-batch-title">' + esc(p.title || '(bez tytułu)') + '</span>'
+                    + '<span class="cqa-batch-title">' + esc(p.title || (i18n.noTitle || '(no title)')) + '</span>'
                     + '<span class="cqa-batch-type">(' + esc(p.type) + ')</span>'
                     + '</div>';
             });
 
-            $('#cqa-batch-count').text('Wpisy do analizy: ' + posts.length);
+            $('#cqa-batch-count').text('Posts to analyze: ' + posts.length);
             $('#cqa-batch-post-list').html(listHtml);
             $('#cqa-batch-list-wrap').slideDown(200);
             $('#cqa-batch-run-btn').prop('disabled', posts.length === 0);
             $('#cqa-batch-log').hide().html('');
         }).fail(function () {
-            $btn.prop('disabled', false).text('📋 Załaduj wpisy');
-            $status.text('Błąd połączenia.').css('color', '#dc2626');
+            $btn.prop('disabled', false).text('📋 ' + ($('#cqa-batch-load-btn').data('label') || 'Load posts'));
+            $status.text(i18n.connectionError || 'Connection error.').css('color', '#dc2626');
         });
     });
 
@@ -189,20 +248,20 @@
         $('#cqa-batch-run-btn').hide();
         $('#cqa-batch-stop-btn').show();
         $('#cqa-batch-log').show().html('');
-        logBatch('⚡ Uruchomiono analizę ' + batchQueue.length + ' wpisów…', '#6366f1');
+        logBatch('⚡ Started analysis of ' + batchQueue.length + ' posts…', '#6366f1');
         batchRunNext(batchQueue, 0);
     });
 
     $(document).on('click', '#cqa-batch-stop-btn', function () {
         batchStopped = true;
-        logBatch('⏹ Zatrzymano przez użytkownika.', '#dc2626');
+        logBatch('⏹ ' + (i18n.batchStopped || 'Stopped by user.'), '#dc2626');
         $('#cqa-batch-stop-btn').hide();
         $('#cqa-batch-run-btn').show();
     });
 
     function logBatch(msg, color) {
         var $log  = $('#cqa-batch-log');
-        var time  = new Date().toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        var time  = new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         var $line = $('<div>').html(
             '<span style="color:#64748b; margin-right:8px;">' + esc(time) + '</span>'
             + '<span style="color:' + (color || '#e2e8f0') + ';">' + esc(msg) + '</span>'
@@ -214,7 +273,7 @@
     function batchRunNext(queue, index) {
         if (batchStopped || index >= queue.length) {
             if (!batchStopped) {
-                logBatch('✅ Zakończono! Przeanalizowano ' + queue.length + ' wpisów.', '#16a34a');
+                logBatch('✅ Completed! Analyzed ' + queue.length + ' posts.', '#16a34a');
             }
             $('#cqa-batch-stop-btn').hide();
             $('#cqa-batch-run-btn').show();
@@ -223,28 +282,25 @@
 
         var post   = queue[index];
         var postId = post.id;
-        var title  = post.title || '(bez tytułu)';
+        var title  = post.title || (i18n.noTitle || '(no title)');
 
-        logBatch('[' + (index + 1) + '/' + queue.length + '] Analizuję: ' + title, '#94a3b8');
+        logBatch('[' + (index + 1) + '/' + queue.length + '] Analyzing: ' + title, '#94a3b8');
 
         var steps = [
-            { action: 'cqa_spell_check',  label: 'pisownia' },
-            { action: 'cqa_readability',   label: 'czytelność' },
+            { action: 'cqa_spell_check',  label: i18n.stepSpelling    || 'spelling' },
+            { action: 'cqa_readability',   label: i18n.stepReadability || 'readability' },
             { action: 'cqa_ai_friendly',   label: 'AI-Friendly' },
         ];
 
         function runStep(si) {
             if (batchStopped) return;
             if (si >= steps.length) {
-                logBatch('  ✓ Gotowe: ' + title, '#16a34a');
-                // 3-second delay before next post
-                setTimeout(function () {
-                    batchRunNext(queue, index + 1);
-                }, 3000);
+                logBatch('  ✓ Done: ' + title, '#16a34a');
+                setTimeout(function () { batchRunNext(queue, index + 1); }, 3000);
                 return;
             }
 
-            var step = steps[si];
+            var step  = steps[si];
             var extra = { post_id: postId, content: '' };
             if (step.action === 'cqa_ai_friendly') extra.post_title = post.title || '';
 
@@ -253,12 +309,12 @@
                 if (res.success) {
                     logBatch('    ✓ ' + step.label + ' OK', '#16a34a');
                 } else {
-                    logBatch('    ✗ ' + step.label + ': ' + (res.data || 'błąd'), '#dc2626');
+                    logBatch('    ✗ ' + step.label + ': ' + (res.data || (i18n.unknownError || 'error')), '#dc2626');
                 }
                 runStep(si + 1);
             }).fail(function () {
                 if (batchStopped) return;
-                logBatch('    ✗ ' + step.label + ': błąd połączenia', '#dc2626');
+                logBatch('    ✗ ' + step.label + ': ' + (i18n.connectionError || 'connection error'), '#dc2626');
                 runStep(si + 1);
             });
         }
@@ -275,9 +331,9 @@
         var $status = $('#cqa-test-status');
         var key     = $('#cqa-api-key-input').val().trim();
 
-        if (!key) { $status.text('Podaj klucz API.').css('color', '#dc2626'); return; }
+        if (!key) { $status.text(i18n.enterApiKey || 'Please enter an API key.').css('color', '#dc2626'); return; }
 
-        $btn.prop('disabled', true).text('Testuję…');
+        $btn.prop('disabled', true).text(i18n.testing || 'Testing…');
         $status.text('').css('color', '');
 
         $.post(admin.ajaxUrl, {
@@ -285,16 +341,16 @@
             nonce:   admin.nonce,
             api_key: key,
         }, function (res) {
-            $btn.prop('disabled', false).text('🔌 Testuj połączenie');
+            $btn.prop('disabled', false).text('🔌 ' + ($('#cqa-test-api-btn').data('label') || 'Test connection'));
             if (!res.success) {
-                $status.text('Błąd: ' + (res.data || 'Nieznany błąd')).css('color', '#dc2626');
+                $status.text((i18n.errPrefix || 'Error: ') + (res.data || i18n.unknownError || 'Unknown error')).css('color', '#dc2626');
                 return;
             }
-            $status.text('Połączono! Modele załadowane.').css('color', '#16a34a');
+            $status.text(i18n.connected || 'Connected! Models loaded.').css('color', '#16a34a');
             populateModels(res.data.models || []);
         }).fail(function () {
-            $btn.prop('disabled', false).text('🔌 Testuj połączenie');
-            $status.text('Błąd połączenia.').css('color', '#dc2626');
+            $btn.prop('disabled', false).text('🔌 ' + ($('#cqa-test-api-btn').data('label') || 'Test connection'));
+            $status.text(i18n.connectionError || 'Connection error.').css('color', '#dc2626');
         });
     });
 
@@ -303,7 +359,7 @@
         var current = admin.savedModel || '';
         $sel.empty();
         if (!models.length) {
-            $sel.append('<option value="">Brak modeli</option>');
+            $sel.append('<option value="">' + (i18n.noModels || 'No models available') + '</option>');
             return;
         }
         $.each(models, function (i, m) {
@@ -315,6 +371,10 @@
         if (admin.models && admin.models.length) {
             populateModels(admin.models);
         }
+        // Store button labels
+        $('#cqa-ov-load-btn').data('label', $('#cqa-ov-load-btn').text().replace(/^[^\s]+\s/, '').trim());
+        $('#cqa-batch-load-btn').data('label', $('#cqa-batch-load-btn').text().replace(/^[^\s]+\s/, '').trim());
+        $('#cqa-test-api-btn').data('label', $('#cqa-test-api-btn').text().replace(/^[^\s]+\s/, '').trim());
     });
 
     /* ═══════════════════════════════════════════════════════
@@ -335,7 +395,7 @@
 
     function doSearch(q) {
         var $res = $('#cqa-search-results');
-        $res.html('<span style="color:#64748b; font-size:13px;">Szukam…</span>');
+        $res.html('<span style="color:#64748b; font-size:13px;">' + (i18n.searching || 'Searching…') + '</span>');
 
         $.post(admin.ajaxUrl, {
             action: 'cqa_search_posts',
@@ -343,37 +403,28 @@
             s:      q,
         }, function (res) {
             if (!res.success || !res.data.length) {
-                $res.html('<p style="color:#94a3b8; font-size:13px;">Nie znaleziono wpisów.</p>');
+                $res.html('<p style="color:#94a3b8; font-size:13px;">' + (i18n.noPostsFound || 'No posts found.') + '</p>');
                 return;
             }
-            var html = '<div style="display:flex; flex-direction:column; gap:6px; max-height:300px; overflow-y:auto;">';
+            var html = '<div class="cqa-search-list">';
             $.each(res.data, function (i, p) {
                 var badges = '';
                 if (p.read_score !== null && p.read_score !== undefined) {
-                    var rc = p.read_score >= 70 ? '#16a34a' : (p.read_score >= 50 ? '#ca8a04' : '#dc2626');
-                    badges += '<span style="background:' + rc + '; color:#fff; padding:1px 6px; border-radius:999px; font-size:10px; font-weight:600;">📊 ' + p.read_score + ' ' + (p.read_grade || '') + '</span> ';
+                    badges += '📊 ' + scorePill(p.read_score, p.read_grade) + ' ';
                 }
                 if (p.ai_score !== null && p.ai_score !== undefined) {
-                    var ac = p.ai_score >= 80 ? '#16a34a' : (p.ai_score >= 60 ? '#ca8a04' : '#dc2626');
-                    badges += '<span style="background:' + ac + '; color:#fff; padding:1px 6px; border-radius:999px; font-size:10px; font-weight:600;">🤖 ' + p.ai_score + ' ' + (p.ai_grade || '') + '</span>';
+                    badges += '🤖 ' + scorePill(p.ai_score, p.ai_grade);
                 }
                 html += '<div class="cqa-search-item" data-id="' + p.id + '" data-title="' + $('<div>').text(p.title).html() + '" data-url="' + $('<div>').text(p.url).html() + '" data-edit="' + $('<div>').text(p.edit_url || '').html() + '">'
-                    + '<div style="font-weight:600; font-size:13px; color:#1e293b;">' + $('<div>').text(p.title).html() + '</div>'
-                    + '<div style="font-size:11px; color:#94a3b8; margin-top:2px; display:flex; gap:6px; align-items:center; flex-wrap:wrap;">'
-                    + '<span>' + $('<div>').text(p.type).html() + '</span>'
-                    + (badges ? '&nbsp;' + badges : '')
+                    + '<div class="cqa-search-item-title">' + $('<div>').text(p.title).html() + '</div>'
+                    + '<div class="cqa-search-item-meta"><span>' + $('<div>').text(p.type).html() + '</span>'
+                    + (badges ? badges : '')
                     + '</div></div>';
             });
             html += '</div>';
             $res.html(html);
         });
     }
-
-    $(document).on('mouseenter', '.cqa-search-item', function () {
-        $(this).css('background', '#f1f5f9');
-    }).on('mouseleave', '.cqa-search-item', function () {
-        $(this).css('background', '#fff');
-    });
 
     $(document).on('click', '.cqa-search-item', function () {
         selectedPostId = $(this).data('id');
@@ -385,7 +436,7 @@
         $('#cqa-search-input').val(selectedTitle);
 
         var editLink = editUrl
-            ? '<a href="' + $('<div>').text(editUrl).html() + '" class="button" style="font-size:11px; height:26px; line-height:24px; padding:0 10px;">✏️ Edytuj</a>'
+            ? '<a href="' + $('<div>').text(editUrl).html() + '" class="button" style="font-size:11px; height:26px; line-height:24px; padding:0 10px;">✏️ Edit</a>'
             : '';
 
         $('#cqa-post-info').html(
@@ -411,28 +462,6 @@
 
     /* ── Admin analysis buttons ───────────────────────────── */
 
-    function esc(str) {
-        return $('<div>').text(String(str || '')).html();
-    }
-
-    function gradeColor(score) {
-        if (score >= 80) return '#16a34a';
-        if (score >= 65) return '#ca8a04';
-        if (score >= 45) return '#ea580c';
-        return '#dc2626';
-    }
-
-    function scoreCircle(score, grade, color) {
-        return '<div style="display:inline-flex; align-items:center; gap:12px; margin-bottom:12px;">'
-            + '<div style="width:60px; height:60px; border-radius:50%; border:4px solid ' + color + '; '
-            + 'display:flex; flex-direction:column; align-items:center; justify-content:center;">'
-            + '<span style="font-size:18px; font-weight:800; color:' + color + '; line-height:1;">' + score + '</span>'
-            + '<span style="font-size:9px; color:#94a3b8;">/100</span>'
-            + '</div>'
-            + '<div><span style="font-size:18px; font-weight:700; color:' + color + ';">' + esc(grade) + '</span></div>'
-            + '</div>';
-    }
-
     function setAdminProgress(pct, label) {
         var $p = $('#cqa-admin-progress');
         $p.show();
@@ -445,18 +474,18 @@
         $.post(admin.ajaxUrl, $.extend({ action: action, nonce: admin.nonce, post_id: selectedPostId, content: '' }, extra),
             function (res) {
                 if (res.success) success(res.data);
-                else fail(res.data || 'Błąd API');
+                else fail(res.data || (i18n.unknownError || 'Unknown error'));
             }
-        ).fail(function () { fail('Błąd połączenia.'); });
+        ).fail(function () { fail(i18n.connectionError || 'Connection error.'); });
     }
 
     function renderAdminSpell(data) {
         var errors = data.spelling_errors || [];
         var $el    = $('#cqa-admin-spell-content');
         if (!errors.length) {
-            $el.html('<p style="color:#16a34a; font-size:13px;">✅ Nie znaleziono błędów pisowni.</p>');
+            $el.html('<p style="color:#16a34a; font-size:13px;">✅ ' + (i18n.noSpellErrors || 'No spelling errors found.') + '</p>');
         } else {
-            var html = '<div style="font-size:13px; color:#dc2626; margin-bottom:8px;"><strong>' + errors.length + ' błędów</strong></div><ul style="margin:0; padding-left:18px;">';
+            var html = '<div class="cqa-admin-errors-count"><strong>' + errors.length + ' ' + (i18n.errorsLabel || 'errors') + '</strong></div><ul style="margin:0; padding-left:18px;">';
             $.each(errors, function (i, e) {
                 html += '<li style="margin-bottom:5px; font-size:12px;">'
                     + '<strong style="color:#dc2626;">' + esc(e.wrong) + '</strong> → <strong style="color:#16a34a;">' + esc(e.correct) + '</strong>'
@@ -478,9 +507,9 @@
         var html  = scoreCircle(score, grade, color);
         html += '<div style="font-size:13px; color:#1e293b; font-weight:600; margin-bottom:4px;">' + esc(data.reading_level || '') + '</div>';
         html += '<div style="font-size:12px; color:#64748b; margin-bottom:10px;">' + esc(data.reading_level_description || '') + '</div>';
-        html += '<div style="font-size:12px; color:#475569; margin-bottom:10px;">⏱ ~' + esc(data.reading_time_minutes || '?') + ' min | ' + esc(data.word_count || '?') + ' słów</div>';
+        html += '<div style="font-size:12px; color:#475569; margin-bottom:10px;">⏱ ~' + esc(data.reading_time_minutes || '?') + ' ' + (i18n.min || 'min') + ' | ' + esc(data.word_count || '?') + ' ' + (i18n.wordsLabel || 'words') + '</div>';
         if (data.top_improvements && data.top_improvements.length) {
-            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Priorytety poprawy</div><ol style="margin:0; padding-left:18px; font-size:12px;">';
+            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">' + (i18n.improvPriorities || 'Improvement priorities') + '</div><ol style="margin:0; padding-left:18px; font-size:12px;">';
             $.each(data.top_improvements, function (i, t) { html += '<li>' + esc(t) + '</li>'; });
             html += '</ol>';
         }
@@ -498,7 +527,7 @@
             html += '<p style="font-size:12px; color:#475569; margin:0 0 10px;">' + esc(data.summary) + '</p>';
         }
         if (data.top_improvements && data.top_improvements.length) {
-            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Priorytety poprawy</div><ol style="margin:0; padding-left:18px; font-size:12px;">';
+            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">' + (i18n.improvPriorities || 'Improvement priorities') + '</div><ol style="margin:0; padding-left:18px; font-size:12px;">';
             $.each(data.top_improvements, function (i, t) { html += '<li>' + esc(t) + '</li>'; });
             html += '</ol>';
         }
@@ -525,30 +554,30 @@
     $(document).on('click', '#cqa-admin-btn-spell', function () {
         if (!selectedPostId) return;
         disableAdminBtns(true);
-        setAdminProgress(50, 'Sprawdzam pisownię…');
+        setAdminProgress(50, i18n.checkingSpelling || 'Checking spelling…');
         ajaxAnalyze('cqa_spell_check', {},
-            function (d) { setAdminProgress(100, 'Gotowe!'); renderAdminSpell(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
-            function (e) { setAdminProgress(0, 'Błąd: ' + e); disableAdminBtns(false); }
+            function (d) { setAdminProgress(100, i18n.done || 'Done!'); renderAdminSpell(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
+            function (e) { setAdminProgress(0, (i18n.errPrefix || 'Error: ') + e); disableAdminBtns(false); }
         );
     });
 
     $(document).on('click', '#cqa-admin-btn-readability', function () {
         if (!selectedPostId) return;
         disableAdminBtns(true);
-        setAdminProgress(50, 'Analizuję czytelność…');
+        setAdminProgress(50, i18n.analyzingRead || 'Analyzing readability…');
         ajaxAnalyze('cqa_readability', {},
-            function (d) { setAdminProgress(100, 'Gotowe!'); renderAdminRead(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
-            function (e) { setAdminProgress(0, 'Błąd: ' + e); disableAdminBtns(false); }
+            function (d) { setAdminProgress(100, i18n.done || 'Done!'); renderAdminRead(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
+            function (e) { setAdminProgress(0, (i18n.errPrefix || 'Error: ') + e); disableAdminBtns(false); }
         );
     });
 
     $(document).on('click', '#cqa-admin-btn-ai', function () {
         if (!selectedPostId) return;
         disableAdminBtns(true);
-        setAdminProgress(50, 'Weryfikuję AI-Friendly…');
+        setAdminProgress(50, i18n.checkingAI || 'Checking AI-Friendly…');
         ajaxAnalyze('cqa_ai_friendly', { post_title: selectedTitle },
-            function (d) { setAdminProgress(100, 'Gotowe!'); renderAdminAi(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
-            function (e) { setAdminProgress(0, 'Błąd: ' + e); disableAdminBtns(false); }
+            function (d) { setAdminProgress(100, i18n.done || 'Done!'); renderAdminAi(d); disableAdminBtns(false); setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1200); },
+            function (e) { setAdminProgress(0, (i18n.errPrefix || 'Error: ') + e); disableAdminBtns(false); }
         );
     });
 
@@ -558,16 +587,16 @@
         clearAdminResults();
 
         var steps = [
-            { action: 'cqa_spell_check',  pct: 33, label: 'Sprawdzam pisownię…',     render: renderAdminSpell, extra: {} },
-            { action: 'cqa_readability',   pct: 66, label: 'Analizuję czytelność…',   render: renderAdminRead,  extra: {} },
-            { action: 'cqa_ai_friendly',   pct: 99, label: 'Weryfikuję AI-Friendly…', render: renderAdminAi,    extra: { post_title: selectedTitle } },
+            { action: 'cqa_spell_check',  pct: 33, label: i18n.checkingSpelling || 'Checking spelling…',     render: renderAdminSpell, extra: {} },
+            { action: 'cqa_readability',   pct: 66, label: i18n.analyzingRead    || 'Analyzing readability…', render: renderAdminRead,  extra: {} },
+            { action: 'cqa_ai_friendly',   pct: 99, label: i18n.checkingAI       || 'Checking AI-Friendly…',  render: renderAdminAi,    extra: { post_title: selectedTitle } },
         ];
 
-        setAdminProgress(0, 'Przygotowuję…');
+        setAdminProgress(0, i18n.preparing || 'Preparing…');
 
         function runStep(i) {
             if (i >= steps.length) {
-                setAdminProgress(100, 'Gotowe!');
+                setAdminProgress(100, i18n.done || 'Done!');
                 disableAdminBtns(false);
                 setTimeout(function () { $('#cqa-admin-progress').hide(); }, 1500);
                 return;
@@ -582,16 +611,38 @@
         runStep(0);
     });
 
-    /* ── Reset cost ───────────────────────────────────────── */
+    /* ── Reset cost (inline confirm — no confirm()) ───────── */
 
     $(document).on('click', '#cqa-reset-cost-btn', function () {
-        if (!confirm('Zresetować licznik kosztów?')) return;
         var $btn = $(this);
-        $btn.prop('disabled', true);
-        $.post(admin.ajaxUrl, { action: 'cqa_reset_cost', nonce: admin.nonce }, function () {
-            $btn.prop('disabled', false);
-            location.reload();
-        });
+
+        if ($btn.data('confirming')) {
+            $btn.removeData('confirming');
+            $('#cqa-reset-inline-confirm').remove();
+            $btn.prop('disabled', true);
+            $.post(admin.ajaxUrl, { action: 'cqa_reset_cost', nonce: admin.nonce }, function () {
+                $btn.prop('disabled', false);
+                location.reload();
+            });
+            return;
+        }
+
+        $btn.data('confirming', true);
+        var $confirm = $('<span id="cqa-reset-inline-confirm" class="cqa-inline-confirm">'
+            + (i18n.confirmReset || 'Reset cost counter?') + ' '
+            + '<button class="button" id="cqa-reset-yes">' + (i18n.resetConfirmYes || 'Yes, reset') + '</button>'
+            + '<button class="button" id="cqa-reset-no">' + (i18n.resetConfirmNo || 'Cancel') + '</button>'
+            + '</span>');
+        $btn.after($confirm);
+    });
+
+    $(document).on('click', '#cqa-reset-yes', function () {
+        $('#cqa-reset-cost-btn').trigger('click');
+    });
+
+    $(document).on('click', '#cqa-reset-no', function () {
+        $('#cqa-reset-cost-btn').removeData('confirming');
+        $('#cqa-reset-inline-confirm').remove();
     });
 
 }(jQuery));

@@ -2,6 +2,23 @@
 
 All notable changes to Content Quality Analyzer are documented in this file.
 
+## [1.4.0] - 2026-04-20
+
+### Added
+- "Copy all fixes" button in Spelling Corrector results.
+- SVG sparkline chart in Analysis History showing readability and AI-Friendly score trends.
+- Client-side pagination (25 items/page) in Posts Overview admin page.
+- Full JS i18n via `wp_localize_script()` — ~100 translated strings in `panel.i18n` / `admin.i18n`.
+- New translation keys added to all 9 locales (de_DE, fr_FR, es_ES, it_IT, pt_BR, ru_RU, uk, nl_NL, cs_CZ).
+
+### Changed
+- Rewrote all 5 Gemini API prompts from Polish to language-neutral English; AI now responds in the same language as the input text.
+- Replaced all inline `style=` attributes in JS render functions with proper CSS classes.
+- Gutenberg sidebar rewritten from ES5 prototype-based class to functional component using `wp.element.useState` hooks.
+
+### Fixed
+- Removed `alert()` and `confirm()` dialogs — replaced with inline UI messages and two-click inline confirmation.
+
 ## [1.2.0] - 2026-04-20
 
 ### Changed

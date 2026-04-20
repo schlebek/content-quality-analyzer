@@ -60,8 +60,14 @@ msgstr "Todos os tipos"
 msgid "Apply selected fixes"
 msgstr "Aplicar correções selecionadas"
 
+msgid "Avg. sentence"
+msgstr "Frase méd."
+
 msgid "Batch analysis"
 msgstr "Análise em lote"
+
+msgid "Cancel"
+msgstr "Cancelar"
 
 msgid "Check AI-Friendly"
 msgstr "Verificar amigabilidade com IA"
@@ -69,8 +75,35 @@ msgstr "Verificar amigabilidade com IA"
 msgid "Check spelling"
 msgstr "Verificar ortografia"
 
+msgid "Checking…"
+msgstr "Verificando…"
+
+msgid "Checking AI-Friendly…"
+msgstr "Verificando amigabilidade com IA…"
+
+msgid "Checking spelling…"
+msgstr "Verificando ortografia…"
+
+msgid "Analyzing readability…"
+msgstr "Analisando legibilidade…"
+
 msgid "Click \"Test connection\" to load available models."
 msgstr "Clique em «Testar conexão» para carregar os modelos disponíveis."
+
+msgid "Clarity"
+msgstr "Clareza"
+
+msgid "Complex words"
+msgstr "Palavras complexas"
+
+msgid "Conciseness"
+msgstr "Concisão"
+
+msgid "Connected! Models loaded."
+msgstr "Conectado! Modelos carregados."
+
+msgid "Connection error."
+msgstr "Erro de conexão."
 
 msgid "Content Analyzer"
 msgstr "Analisador de conteúdo"
@@ -78,17 +111,50 @@ msgstr "Analisador de conteúdo"
 msgid "Content Quality Analyzer"
 msgstr "Analisador de qualidade de conteúdo"
 
+msgid "Copied!"
+msgstr "Copiado!"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Copy TL;DR"
+msgstr "Copiar TL;DR"
+
+msgid "Copy all fixes"
+msgstr "Copiar todas as correções"
+
 msgid "Cost / analysis"
 msgstr "Custo / análise"
+
+msgid "Cost: $"
+msgstr "Custo: $"
+
+msgid "Date"
+msgstr "Data"
 
 msgid "Dismiss all"
 msgstr "Dispensar tudo"
 
+msgid "Done!"
+msgstr "Concluído!"
+
+msgid "Engagement"
+msgstr "Engajamento"
+
+msgid "Error: "
+msgstr "Erro: "
+
 msgid "Estimated analysis costs (Gemini Flash)"
 msgstr "Custos estimados de análise (Gemini Flash)"
 
+msgid "Find"
+msgstr "Encontrar"
+
 msgid "First configure your API key in the %s tab."
 msgstr "Primeiro configure sua chave de API na aba %s."
+
+msgid "Fix"
+msgstr "Corrigir"
 
 msgid "Flash = cheaper | Pro = better for long analyses"
 msgstr "Flash = mais barato | Pro = melhor para análises longas"
@@ -99,17 +165,29 @@ msgstr "Gerar TL;DR"
 msgid "Gemini Model"
 msgstr "Modelo Gemini"
 
+msgid "Generating…"
+msgstr "Gerando…"
+
 msgid "Get your API key from %s."
 msgstr "Obtenha sua chave de API em %s."
 
 msgid "Google Gemini API Configuration"
 msgstr "Configuração da API do Google Gemini"
 
+msgid "H2/H3 headings"
+msgstr "Títulos H2/H3"
+
 msgid "Heading Structure"
 msgstr "Estrutura de títulos"
 
+msgid "Heading structure is correct."
+msgstr "A estrutura de títulos está correta."
+
 msgid "Hint (optional): e.g. simplify sentences, add examples…"
 msgstr "Dica (opcional): ex. simplificar frases, adicionar exemplos…"
+
+msgid "Improvement priorities"
+msgstr "Prioridades de melhoria"
 
 msgid "Insufficient permissions."
 msgstr "Permissões insuficientes."
@@ -117,14 +195,47 @@ msgstr "Permissões insuficientes."
 msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
 msgstr "Chave inválida ou nenhum modelo disponível — verifique as permissões da sua chave no Google AI Studio."
 
+msgid "Issues"
+msgstr "Problemas"
+
+msgid "Jargon"
+msgstr "Jargão"
+
+msgid "Key points"
+msgstr "Pontos-chave"
+
 msgid "Load list"
 msgstr "Carregar lista"
 
 msgid "Load posts"
 msgstr "Carregar posts"
 
+msgid "Loading…"
+msgstr "Carregando…"
+
+msgid "Logical flow"
+msgstr "Fluxo lógico"
+
+msgid "Long sentences"
+msgstr "Frases longas"
+
 msgid "Missing API key or model. Please configure the plugin."
 msgstr "Chave de API ou modelo ausente. Configure o plugin."
+
+msgid "No H1 heading."
+msgstr "Sem título H1."
+
+msgid "No H2 headings — add sections."
+msgstr "Sem títulos H2 — adicione seções."
+
+msgid "No analysis history."
+msgstr "Sem histórico de análise."
+
+msgid "No content."
+msgstr "Sem conteúdo."
+
+msgid "No content to analyze. Please add content to the post."
+msgstr "Sem conteúdo para analisar. Adicione conteúdo ao post."
 
 msgid "No content to analyze."
 msgstr "Nenhum conteúdo para analisar."
@@ -141,8 +252,44 @@ msgstr "Nenhum erro encontrado. O texto parece correto."
 msgid "No fragment to rewrite."
 msgstr "Nenhum fragmento para reescrever."
 
+msgid "No headings found in content."
+msgstr "Nenhum título encontrado no conteúdo."
+
+msgid "No models available"
+msgstr "Nenhum modelo disponível"
+
+msgid "No posts."
+msgstr "Nenhum post."
+
+msgid "No posts found."
+msgstr "Nenhum post encontrado."
+
+msgid "No spelling errors found."
+msgstr "Nenhum erro ortográfico encontrado."
+
+msgid "Not found"
+msgstr "Não encontrado"
+
+msgid "(no title)"
+msgstr "(sem título)"
+
+msgid "(no text)"
+msgstr "(sem texto)"
+
 msgid "Overview"
 msgstr "Visão geral"
+
+msgid "Page %1$d of %2$d"
+msgstr "Página %1$d de %2$d"
+
+msgid "Para. structure"
+msgstr "Estr. parágrafo"
+
+msgid "Paragraphs"
+msgstr "Parágrafos"
+
+msgid "Passive voice"
+msgstr "Voz passiva"
 
 msgid "Paste a text fragment to rewrite:"
 msgstr "Cole um fragmento de texto para reescrever:"
@@ -150,8 +297,14 @@ msgstr "Cole um fragmento de texto para reescrever:"
 msgid "Paste text fragment…"
 msgstr "Colar fragmento de texto…"
 
+msgid "Please enter an API key."
+msgstr "Por favor, insira uma chave de API."
+
 msgid "Please provide an API key."
 msgstr "Forneça uma chave de API."
+
+msgid "Please select at least one type."
+msgstr "Selecione pelo menos um tipo."
 
 msgid "Post types to analyze"
 msgstr "Tipos de post para analisar"
@@ -162,11 +315,20 @@ msgstr "Visão geral dos posts"
 msgid "Preparing…"
 msgstr "Preparando…"
 
+msgid "Preview"
+msgstr "Pré-visualizar"
+
 msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
 msgstr "Preços para Gemini 2.0 Flash: $0,075/1M IN, $0,30/1M OUT (nível gratuito: sem cobranças até o limite)"
 
 msgid "Readability"
 msgstr "Legibilidade"
+
+msgid "Reading time:"
+msgstr "Tempo de leitura:"
+
+msgid "Reset cost counter?"
+msgstr "Redefinir o contador de custos?"
 
 msgid "Reset counter"
 msgstr "Redefinir contador"
@@ -177,8 +339,14 @@ msgstr "Reescrever fragmento"
 msgid "Rewrite fragment"
 msgstr "Reescrever fragmento"
 
+msgid "Rewriting…"
+msgstr "Reescrevendo…"
+
 msgid "Run analysis"
 msgstr "Executar análise"
+
+msgid "AI-Friendly"
+msgstr "Amigável para IA"
 
 msgid "Save settings"
 msgstr "Salvar configurações"
@@ -189,8 +357,26 @@ msgstr "Pesquisar"
 msgid "Search post by title…"
 msgstr "Pesquisar post por título…"
 
+msgid "Searching…"
+msgstr "Pesquisando…"
+
 msgid "Select a post"
 msgstr "Selecionar um post"
+
+msgid "Sent. variety"
+msgstr "Var. frases"
+
+msgid "Sentences"
+msgstr "Frases"
+
+msgid "Settings →"
+msgstr "Configurações →"
+
+msgid "Short sentences"
+msgstr "Frases curtas"
+
+msgid "Skipped level after"
+msgstr "Nível pulado após"
 
 msgid "Spelling"
 msgstr "Ortografia"
@@ -201,8 +387,17 @@ msgstr "Corretor ortográfico"
 msgid "Spelling corrector"
 msgstr "Corretor ortográfico"
 
+msgid "Spelling errors"
+msgstr "Erros ortográficos"
+
 msgid "Stop"
 msgstr "Parar"
+
+msgid "Stopped by user."
+msgstr "Parado pelo usuário."
+
+msgid "Strengths"
+msgstr "Pontos fortes"
 
 msgid "TL;DR Generator"
 msgstr "Gerador TL;DR"
@@ -210,8 +405,14 @@ msgstr "Gerador TL;DR"
 msgid "Test connection"
 msgstr "Testar conexão"
 
+msgid "Testing…"
+msgstr "Testando…"
+
 msgid "Text Readability"
 msgstr "Legibilidade do texto"
+
+msgid "Title"
+msgstr "Título"
 
 msgid "Tokens IN (est.)"
 msgstr "Tokens entrada (est.)"
@@ -219,8 +420,62 @@ msgstr "Tokens entrada (est.)"
 msgid "Tokens OUT (est.)"
 msgstr "Tokens saída (est.)"
 
+msgid "Top improvements"
+msgstr "Principais melhorias"
+
 msgid "Total cost since last reset"
 msgstr "Custo total desde o último reset"
 
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Unknown error"
+msgstr "Erro desconhecido"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "Vocabulary"
+msgstr "Vocabulário"
+
+msgid "What was improved:"
+msgstr "O que foi melhorado:"
+
+msgid "Words"
+msgstr "Palavras"
+
+msgid "Yes, reset"
+msgstr "Sim, redefinir"
+
+msgid "actions"
+msgstr "ações"
+
 msgid "errors"
 msgstr "erros"
+
+msgid "min"
+msgstr "min"
+
+msgid "posts"
+msgstr "posts"
+
+msgid "readability"
+msgstr "legibilidade"
+
+msgid "spelling"
+msgstr "ortografia"
+
+msgid "words"
+msgstr "palavras"
+
+msgid "0 errors"
+msgstr "0 erros"
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "✓ No errors"
+msgstr "✓ Sem erros"
+
+msgid "More than one H1"
+msgstr "Mais de um H1"

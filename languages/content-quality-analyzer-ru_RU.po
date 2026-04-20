@@ -60,8 +60,14 @@ msgstr "Все типы"
 msgid "Apply selected fixes"
 msgstr "Применить выбранные исправления"
 
+msgid "Avg. sentence"
+msgstr "Ср. предложение"
+
 msgid "Batch analysis"
 msgstr "Пакетный анализ"
+
+msgid "Cancel"
+msgstr "Отмена"
 
 msgid "Check AI-Friendly"
 msgstr "Проверить дружественность к ИИ"
@@ -69,8 +75,35 @@ msgstr "Проверить дружественность к ИИ"
 msgid "Check spelling"
 msgstr "Проверить правописание"
 
+msgid "Checking…"
+msgstr "Проверка…"
+
+msgid "Checking AI-Friendly…"
+msgstr "Проверка ИИ-дружественности…"
+
+msgid "Checking spelling…"
+msgstr "Проверка правописания…"
+
+msgid "Analyzing readability…"
+msgstr "Анализ читаемости…"
+
 msgid "Click \"Test connection\" to load available models."
 msgstr "Нажмите «Проверить соединение», чтобы загрузить доступные модели."
+
+msgid "Clarity"
+msgstr "Ясность"
+
+msgid "Complex words"
+msgstr "Сложные слова"
+
+msgid "Conciseness"
+msgstr "Лаконичность"
+
+msgid "Connected! Models loaded."
+msgstr "Подключено! Модели загружены."
+
+msgid "Connection error."
+msgstr "Ошибка соединения."
 
 msgid "Content Analyzer"
 msgstr "Анализатор контента"
@@ -78,17 +111,50 @@ msgstr "Анализатор контента"
 msgid "Content Quality Analyzer"
 msgstr "Анализатор качества контента"
 
+msgid "Copied!"
+msgstr "Скопировано!"
+
+msgid "Copy"
+msgstr "Копировать"
+
+msgid "Copy TL;DR"
+msgstr "Копировать TL;DR"
+
+msgid "Copy all fixes"
+msgstr "Копировать все исправления"
+
 msgid "Cost / analysis"
 msgstr "Стоимость / анализ"
+
+msgid "Cost: $"
+msgstr "Стоимость: $"
+
+msgid "Date"
+msgstr "Дата"
 
 msgid "Dismiss all"
 msgstr "Отклонить всё"
 
+msgid "Done!"
+msgstr "Готово!"
+
+msgid "Engagement"
+msgstr "Вовлечённость"
+
+msgid "Error: "
+msgstr "Ошибка: "
+
 msgid "Estimated analysis costs (Gemini Flash)"
 msgstr "Примерные расходы на анализ (Gemini Flash)"
 
+msgid "Find"
+msgstr "Найти"
+
 msgid "First configure your API key in the %s tab."
 msgstr "Сначала настройте ключ API на вкладке %s."
+
+msgid "Fix"
+msgstr "Исправить"
 
 msgid "Flash = cheaper | Pro = better for long analyses"
 msgstr "Flash = дешевле | Pro = лучше для длинных анализов"
@@ -99,17 +165,29 @@ msgstr "Сгенерировать TL;DR"
 msgid "Gemini Model"
 msgstr "Модель Gemini"
 
+msgid "Generating…"
+msgstr "Генерация…"
+
 msgid "Get your API key from %s."
 msgstr "Получите ключ API из %s."
 
 msgid "Google Gemini API Configuration"
 msgstr "Конфигурация API Google Gemini"
 
+msgid "H2/H3 headings"
+msgstr "Заголовки H2/H3"
+
 msgid "Heading Structure"
 msgstr "Структура заголовков"
 
+msgid "Heading structure is correct."
+msgstr "Структура заголовков верна."
+
 msgid "Hint (optional): e.g. simplify sentences, add examples…"
 msgstr "Подсказка (необязательно): напр. упростить предложения, добавить примеры…"
+
+msgid "Improvement priorities"
+msgstr "Приоритеты улучшения"
 
 msgid "Insufficient permissions."
 msgstr "Недостаточно прав."
@@ -117,14 +195,47 @@ msgstr "Недостаточно прав."
 msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
 msgstr "Неверный ключ или нет доступных моделей — проверьте права ключа в Google AI Studio."
 
+msgid "Issues"
+msgstr "Проблемы"
+
+msgid "Jargon"
+msgstr "Жаргон"
+
+msgid "Key points"
+msgstr "Ключевые моменты"
+
 msgid "Load list"
 msgstr "Загрузить список"
 
 msgid "Load posts"
 msgstr "Загрузить записи"
 
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "Logical flow"
+msgstr "Логический поток"
+
+msgid "Long sentences"
+msgstr "Длинные предложения"
+
 msgid "Missing API key or model. Please configure the plugin."
 msgstr "Отсутствует ключ API или модель. Настройте плагин."
+
+msgid "No H1 heading."
+msgstr "Нет заголовка H1."
+
+msgid "No H2 headings — add sections."
+msgstr "Нет заголовков H2 — добавьте разделы."
+
+msgid "No analysis history."
+msgstr "Нет истории анализов."
+
+msgid "No content."
+msgstr "Нет контента."
+
+msgid "No content to analyze. Please add content to the post."
+msgstr "Нет контента для анализа. Добавьте контент к записи."
 
 msgid "No content to analyze."
 msgstr "Нет контента для анализа."
@@ -141,8 +252,44 @@ msgstr "Ошибок не найдено. Текст выглядит прави
 msgid "No fragment to rewrite."
 msgstr "Нет фрагмента для переработки."
 
+msgid "No headings found in content."
+msgstr "Заголовки не найдены в контенте."
+
+msgid "No models available"
+msgstr "Нет доступных моделей"
+
+msgid "No posts."
+msgstr "Нет записей."
+
+msgid "No posts found."
+msgstr "Записи не найдены."
+
+msgid "No spelling errors found."
+msgstr "Ошибок правописания не найдено."
+
+msgid "Not found"
+msgstr "Не найдено"
+
+msgid "(no title)"
+msgstr "(без заголовка)"
+
+msgid "(no text)"
+msgstr "(без текста)"
+
 msgid "Overview"
 msgstr "Обзор"
+
+msgid "Page %1$d of %2$d"
+msgstr "Страница %1$d из %2$d"
+
+msgid "Para. structure"
+msgstr "Структура абз."
+
+msgid "Paragraphs"
+msgstr "Абзацы"
+
+msgid "Passive voice"
+msgstr "Пассивный залог"
 
 msgid "Paste a text fragment to rewrite:"
 msgstr "Вставьте фрагмент текста для переработки:"
@@ -150,8 +297,14 @@ msgstr "Вставьте фрагмент текста для переработ
 msgid "Paste text fragment…"
 msgstr "Вставить фрагмент текста…"
 
+msgid "Please enter an API key."
+msgstr "Пожалуйста, введите ключ API."
+
 msgid "Please provide an API key."
 msgstr "Пожалуйста, укажите ключ API."
+
+msgid "Please select at least one type."
+msgstr "Выберите хотя бы один тип."
 
 msgid "Post types to analyze"
 msgstr "Типы записей для анализа"
@@ -162,11 +315,20 @@ msgstr "Обзор записей"
 msgid "Preparing…"
 msgstr "Подготовка…"
 
+msgid "Preview"
+msgstr "Просмотр"
+
 msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
 msgstr "Цены для Gemini 2.0 Flash: $0,075/1М вх., $0,30/1М исх. (бесплатный уровень: без оплаты до лимита)"
 
 msgid "Readability"
 msgstr "Читаемость"
+
+msgid "Reading time:"
+msgstr "Время чтения:"
+
+msgid "Reset cost counter?"
+msgstr "Сбросить счётчик стоимости?"
 
 msgid "Reset counter"
 msgstr "Сбросить счётчик"
@@ -177,8 +339,14 @@ msgstr "Переработать фрагмент"
 msgid "Rewrite fragment"
 msgstr "Переработать фрагмент"
 
+msgid "Rewriting…"
+msgstr "Переработка…"
+
 msgid "Run analysis"
 msgstr "Запустить анализ"
+
+msgid "AI-Friendly"
+msgstr "Дружественный к ИИ"
 
 msgid "Save settings"
 msgstr "Сохранить настройки"
@@ -189,8 +357,26 @@ msgstr "Поиск"
 msgid "Search post by title…"
 msgstr "Искать запись по заголовку…"
 
+msgid "Searching…"
+msgstr "Поиск…"
+
 msgid "Select a post"
 msgstr "Выбрать запись"
+
+msgid "Sent. variety"
+msgstr "Разн. предложений"
+
+msgid "Sentences"
+msgstr "Предложения"
+
+msgid "Settings →"
+msgstr "Настройки →"
+
+msgid "Short sentences"
+msgstr "Короткие предложения"
+
+msgid "Skipped level after"
+msgstr "Пропущен уровень после"
 
 msgid "Spelling"
 msgstr "Орфография"
@@ -201,8 +387,17 @@ msgstr "Орфографический корректор"
 msgid "Spelling corrector"
 msgstr "Орфографический корректор"
 
+msgid "Spelling errors"
+msgstr "Ошибки правописания"
+
 msgid "Stop"
 msgstr "Остановить"
+
+msgid "Stopped by user."
+msgstr "Остановлено пользователем."
+
+msgid "Strengths"
+msgstr "Сильные стороны"
 
 msgid "TL;DR Generator"
 msgstr "Генератор TL;DR"
@@ -210,8 +405,14 @@ msgstr "Генератор TL;DR"
 msgid "Test connection"
 msgstr "Проверить соединение"
 
+msgid "Testing…"
+msgstr "Тестирование…"
+
 msgid "Text Readability"
 msgstr "Читаемость текста"
+
+msgid "Title"
+msgstr "Заголовок"
 
 msgid "Tokens IN (est.)"
 msgstr "Токены вх. (оценка)"
@@ -219,8 +420,62 @@ msgstr "Токены вх. (оценка)"
 msgid "Tokens OUT (est.)"
 msgstr "Токены исх. (оценка)"
 
+msgid "Top improvements"
+msgstr "Главные улучшения"
+
 msgid "Total cost since last reset"
 msgstr "Общая стоимость с момента последнего сброса"
 
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Vocabulary"
+msgstr "Словарный запас"
+
+msgid "What was improved:"
+msgstr "Что улучшено:"
+
+msgid "Words"
+msgstr "Слова"
+
+msgid "Yes, reset"
+msgstr "Да, сбросить"
+
+msgid "actions"
+msgstr "действия"
+
 msgid "errors"
 msgstr "ошибок"
+
+msgid "min"
+msgstr "мин"
+
+msgid "posts"
+msgstr "записей"
+
+msgid "readability"
+msgstr "читаемость"
+
+msgid "spelling"
+msgstr "правописание"
+
+msgid "words"
+msgstr "слов"
+
+msgid "0 errors"
+msgstr "0 ошибок"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "✓ No errors"
+msgstr "✓ Нет ошибок"
+
+msgid "More than one H1"
+msgstr "Больше одного H1"

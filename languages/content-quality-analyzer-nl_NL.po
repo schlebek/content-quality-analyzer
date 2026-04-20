@@ -60,8 +60,14 @@ msgstr "Alle typen"
 msgid "Apply selected fixes"
 msgstr "Geselecteerde correcties toepassen"
 
+msgid "Avg. sentence"
+msgstr "Gem. zin"
+
 msgid "Batch analysis"
 msgstr "Batchanalyse"
+
+msgid "Cancel"
+msgstr "Annuleren"
 
 msgid "Check AI-Friendly"
 msgstr "AI-vriendelijkheid controleren"
@@ -69,8 +75,35 @@ msgstr "AI-vriendelijkheid controleren"
 msgid "Check spelling"
 msgstr "Spelling controleren"
 
+msgid "Checking…"
+msgstr "Controleren…"
+
+msgid "Checking AI-Friendly…"
+msgstr "AI-vriendelijkheid controleren…"
+
+msgid "Checking spelling…"
+msgstr "Spelling controleren…"
+
+msgid "Analyzing readability…"
+msgstr "Leesbaarheid analyseren…"
+
 msgid "Click \"Test connection\" to load available models."
 msgstr "Klik op «Verbinding testen» om beschikbare modellen te laden."
+
+msgid "Clarity"
+msgstr "Helderheid"
+
+msgid "Complex words"
+msgstr "Complexe woorden"
+
+msgid "Conciseness"
+msgstr "Beknoptheid"
+
+msgid "Connected! Models loaded."
+msgstr "Verbonden! Modellen geladen."
+
+msgid "Connection error."
+msgstr "Verbindingsfout."
 
 msgid "Content Analyzer"
 msgstr "Inhoudsanalysator"
@@ -78,17 +111,50 @@ msgstr "Inhoudsanalysator"
 msgid "Content Quality Analyzer"
 msgstr "Inhoudskwaliteitsanalysator"
 
+msgid "Copied!"
+msgstr "Gekopieerd!"
+
+msgid "Copy"
+msgstr "Kopiëren"
+
+msgid "Copy TL;DR"
+msgstr "TL;DR kopiëren"
+
+msgid "Copy all fixes"
+msgstr "Alle correcties kopiëren"
+
 msgid "Cost / analysis"
 msgstr "Kosten / analyse"
+
+msgid "Cost: $"
+msgstr "Kosten: $"
+
+msgid "Date"
+msgstr "Datum"
 
 msgid "Dismiss all"
 msgstr "Alles negeren"
 
+msgid "Done!"
+msgstr "Klaar!"
+
+msgid "Engagement"
+msgstr "Betrokkenheid"
+
+msgid "Error: "
+msgstr "Fout: "
+
 msgid "Estimated analysis costs (Gemini Flash)"
 msgstr "Geschatte analysekosten (Gemini Flash)"
 
+msgid "Find"
+msgstr "Zoeken"
+
 msgid "First configure your API key in the %s tab."
 msgstr "Configureer eerst uw API-sleutel op het tabblad %s."
+
+msgid "Fix"
+msgstr "Corrigeren"
 
 msgid "Flash = cheaper | Pro = better for long analyses"
 msgstr "Flash = goedkoper | Pro = beter voor lange analyses"
@@ -99,17 +165,29 @@ msgstr "TL;DR genereren"
 msgid "Gemini Model"
 msgstr "Gemini-model"
 
+msgid "Generating…"
+msgstr "Genereren…"
+
 msgid "Get your API key from %s."
 msgstr "Haal uw API-sleutel op bij %s."
 
 msgid "Google Gemini API Configuration"
 msgstr "Google Gemini API-configuratie"
 
+msgid "H2/H3 headings"
+msgstr "H2/H3-koppen"
+
 msgid "Heading Structure"
 msgstr "Koppenstructuur"
 
+msgid "Heading structure is correct."
+msgstr "Koppenstructuur is correct."
+
 msgid "Hint (optional): e.g. simplify sentences, add examples…"
 msgstr "Tip (optioneel): bv. zinnen vereenvoudigen, voorbeelden toevoegen…"
+
+msgid "Improvement priorities"
+msgstr "Verbeteringsprioriteiten"
 
 msgid "Insufficient permissions."
 msgstr "Onvoldoende rechten."
@@ -117,14 +195,47 @@ msgstr "Onvoldoende rechten."
 msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
 msgstr "Ongeldige sleutel of geen modellen beschikbaar — controleer uw sleutelrechten in Google AI Studio."
 
+msgid "Issues"
+msgstr "Problemen"
+
+msgid "Jargon"
+msgstr "Jargon"
+
+msgid "Key points"
+msgstr "Kernpunten"
+
 msgid "Load list"
 msgstr "Lijst laden"
 
 msgid "Load posts"
 msgstr "Berichten laden"
 
+msgid "Loading…"
+msgstr "Laden…"
+
+msgid "Logical flow"
+msgstr "Logische stroom"
+
+msgid "Long sentences"
+msgstr "Lange zinnen"
+
 msgid "Missing API key or model. Please configure the plugin."
 msgstr "Ontbrekende API-sleutel of model. Configureer de plugin."
+
+msgid "No H1 heading."
+msgstr "Geen H1-kop."
+
+msgid "No H2 headings — add sections."
+msgstr "Geen H2-koppen — voeg secties toe."
+
+msgid "No analysis history."
+msgstr "Geen analysegeschiedenis."
+
+msgid "No content."
+msgstr "Geen inhoud."
+
+msgid "No content to analyze. Please add content to the post."
+msgstr "Geen inhoud om te analyseren. Voeg inhoud toe aan het bericht."
 
 msgid "No content to analyze."
 msgstr "Geen inhoud om te analyseren."
@@ -141,8 +252,44 @@ msgstr "Geen fouten gevonden. Tekst ziet er correct uit."
 msgid "No fragment to rewrite."
 msgstr "Geen fragment om te herschrijven."
 
+msgid "No headings found in content."
+msgstr "Geen koppen gevonden in de inhoud."
+
+msgid "No models available"
+msgstr "Geen modellen beschikbaar"
+
+msgid "No posts."
+msgstr "Geen berichten."
+
+msgid "No posts found."
+msgstr "Geen berichten gevonden."
+
+msgid "No spelling errors found."
+msgstr "Geen spelfouten gevonden."
+
+msgid "Not found"
+msgstr "Niet gevonden"
+
+msgid "(no title)"
+msgstr "(geen titel)"
+
+msgid "(no text)"
+msgstr "(geen tekst)"
+
 msgid "Overview"
 msgstr "Overzicht"
+
+msgid "Page %1$d of %2$d"
+msgstr "Pagina %1$d van %2$d"
+
+msgid "Para. structure"
+msgstr "Par.-structuur"
+
+msgid "Paragraphs"
+msgstr "Alinea's"
+
+msgid "Passive voice"
+msgstr "Lijdende vorm"
 
 msgid "Paste a text fragment to rewrite:"
 msgstr "Plak een tekstfragment om te herschrijven:"
@@ -150,8 +297,14 @@ msgstr "Plak een tekstfragment om te herschrijven:"
 msgid "Paste text fragment…"
 msgstr "Tekstfragment plakken…"
 
+msgid "Please enter an API key."
+msgstr "Voer een API-sleutel in."
+
 msgid "Please provide an API key."
 msgstr "Geef een API-sleutel op."
+
+msgid "Please select at least one type."
+msgstr "Selecteer minimaal één type."
 
 msgid "Post types to analyze"
 msgstr "Te analyseren berichttypes"
@@ -162,11 +315,20 @@ msgstr "Berichtenoverzicht"
 msgid "Preparing…"
 msgstr "Voorbereiden…"
 
+msgid "Preview"
+msgstr "Voorbeeld"
+
 msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
 msgstr "Prijzen voor Gemini 2.0 Flash: $0,075/1M IN, $0,30/1M OUT (gratis tier: geen kosten tot limiet)"
 
 msgid "Readability"
 msgstr "Leesbaarheid"
+
+msgid "Reading time:"
+msgstr "Leestijd:"
+
+msgid "Reset cost counter?"
+msgstr "Kostenteller resetten?"
 
 msgid "Reset counter"
 msgstr "Teller resetten"
@@ -177,8 +339,14 @@ msgstr "Fragment herschrijven"
 msgid "Rewrite fragment"
 msgstr "Fragment herschrijven"
 
+msgid "Rewriting…"
+msgstr "Herschrijven…"
+
 msgid "Run analysis"
 msgstr "Analyse uitvoeren"
+
+msgid "AI-Friendly"
+msgstr "AI-vriendelijk"
 
 msgid "Save settings"
 msgstr "Instellingen opslaan"
@@ -189,8 +357,26 @@ msgstr "Zoeken"
 msgid "Search post by title…"
 msgstr "Bericht zoeken op titel…"
 
+msgid "Searching…"
+msgstr "Zoeken…"
+
 msgid "Select a post"
 msgstr "Selecteer een bericht"
+
+msgid "Sent. variety"
+msgstr "Zin-variatie"
+
+msgid "Sentences"
+msgstr "Zinnen"
+
+msgid "Settings →"
+msgstr "Instellingen →"
+
+msgid "Short sentences"
+msgstr "Korte zinnen"
+
+msgid "Skipped level after"
+msgstr "Overgeslagen niveau na"
 
 msgid "Spelling"
 msgstr "Spelling"
@@ -201,8 +387,17 @@ msgstr "Spellingcorrector"
 msgid "Spelling corrector"
 msgstr "Spellingcorrector"
 
+msgid "Spelling errors"
+msgstr "Spelfouten"
+
 msgid "Stop"
 msgstr "Stoppen"
+
+msgid "Stopped by user."
+msgstr "Gestopt door gebruiker."
+
+msgid "Strengths"
+msgstr "Sterke punten"
 
 msgid "TL;DR Generator"
 msgstr "TL;DR-generator"
@@ -210,8 +405,14 @@ msgstr "TL;DR-generator"
 msgid "Test connection"
 msgstr "Verbinding testen"
 
+msgid "Testing…"
+msgstr "Testen…"
+
 msgid "Text Readability"
 msgstr "Tekstleesbaarheid"
+
+msgid "Title"
+msgstr "Titel"
 
 msgid "Tokens IN (est.)"
 msgstr "Tokens IN (schatting)"
@@ -219,8 +420,62 @@ msgstr "Tokens IN (schatting)"
 msgid "Tokens OUT (est.)"
 msgstr "Tokens UIT (schatting)"
 
+msgid "Top improvements"
+msgstr "Topverbeteringen"
+
 msgid "Total cost since last reset"
 msgstr "Totale kosten sinds laatste reset"
 
+msgid "Type"
+msgstr "Type"
+
+msgid "Unknown error"
+msgstr "Onbekende fout"
+
+msgid "Version"
+msgstr "Versie"
+
+msgid "Vocabulary"
+msgstr "Woordenschat"
+
+msgid "What was improved:"
+msgstr "Wat is verbeterd:"
+
+msgid "Words"
+msgstr "Woorden"
+
+msgid "Yes, reset"
+msgstr "Ja, resetten"
+
+msgid "actions"
+msgstr "acties"
+
 msgid "errors"
 msgstr "fouten"
+
+msgid "min"
+msgstr "min"
+
+msgid "posts"
+msgstr "berichten"
+
+msgid "readability"
+msgstr "leesbaarheid"
+
+msgid "spelling"
+msgstr "spelling"
+
+msgid "words"
+msgstr "woorden"
+
+msgid "0 errors"
+msgstr "0 fouten"
+
+msgid "Actions"
+msgstr "Acties"
+
+msgid "✓ No errors"
+msgstr "✓ Geen fouten"
+
+msgid "More than one H1"
+msgstr "Meer dan één H1"

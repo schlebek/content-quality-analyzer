@@ -7,12 +7,14 @@
     }
 
     var el             = wp.element.createElement;
-    var Component      = wp.element.Component;
+    var useState       = wp.element.useState;
+    var useEffect      = wp.element.useEffect;
     var registerPlugin = wp.plugins.registerPlugin;
     var PluginSidebar  = wp.editPost.PluginSidebar;
     var panel          = window.cqaPanel || {};
+    var i18n           = panel.i18n || {};
 
-    /* ── AJAX helper (fetch-based, no jQuery dependency) ─── */
+    /* ── AJAX helper ──────────────────────────────────────── */
 
     function ajaxPost(action, extra, success, fail) {
         var data = Object.assign({ action: action, nonce: panel.nonce, post_id: panel.postId || 0 }, extra);
@@ -23,9 +25,9 @@
             .then(function (r) { return r.json(); })
             .then(function (res) {
                 if (res.success) success(res.data);
-                else fail(res.data || 'Błąd');
+                else fail(res.data || (i18n.unknownError || 'Unknown error'));
             })
-            .catch(function () { fail('Błąd połączenia.'); });
+            .catch(function () { fail(i18n.connectionError || 'Connection error.'); });
     }
 
     function gradeColor(score) {
@@ -43,11 +45,10 @@
         try { return wp.data.select('core/editor').getEditedPostAttribute('title') || ''; } catch (e) { return ''; }
     }
 
-    /* ── CqaSidebar component ─────────────────────────────── */
+    /* ── CqaSidebar functional component ─────────────────── */
 
-    function CqaSidebar(props) {
-        Component.call(this, props);
-        this.state = {
+    function CqaSidebar() {
+        var _state = useState({
             loading:         false,
             loadingType:     '',
             readScore:       null,
@@ -57,110 +58,97 @@
             spellErrors:     null,
             topImprovements: [],
             error:           '',
-        };
-        this.runAll          = this.runAll.bind(this);
-        this.runSpell        = this.runSpell.bind(this);
-        this.runReadability  = this.runReadability.bind(this);
-        this.runAI           = this.runAI.bind(this);
-    }
+        });
+        var state    = _state[0];
+        var setState = _state[1];
 
-    CqaSidebar.prototype = Object.create(Component.prototype);
-    CqaSidebar.prototype.constructor = CqaSidebar;
+        useEffect(function () {
+            if (panel.cachedRead) {
+                setState(function (s) { return Object.assign({}, s, {
+                    readScore:       panel.cachedRead.score             || null,
+                    readGrade:       panel.cachedRead.grade             || null,
+                    topImprovements: panel.cachedRead.top_improvements  || [],
+                }); });
+            }
+            if (panel.cachedAi) {
+                setState(function (s) { return Object.assign({}, s, {
+                    aiScore: panel.cachedAi.score || null,
+                    aiGrade: panel.cachedAi.grade || null,
+                }); });
+            }
+            if (panel.cachedSpell) {
+                setState(function (s) { return Object.assign({}, s, {
+                    spellErrors: (panel.cachedSpell.spelling_errors || []).length,
+                }); });
+            }
+        }, []);
 
-    CqaSidebar.prototype.componentDidMount = function () {
-        if (panel.cachedRead) {
-            this.setState({
-                readScore:       panel.cachedRead.score       || null,
-                readGrade:       panel.cachedRead.grade       || null,
-                topImprovements: panel.cachedRead.top_improvements || [],
-            });
+        function runSpell() {
+            setState(function (s) { return Object.assign({}, s, { loading: true, loadingType: 'spell', error: '' }); });
+            ajaxPost('cqa_spell_check', { content: getContent() },
+                function (data) {
+                    setState(function (s) { return Object.assign({}, s, { loading: false, spellErrors: (data.spelling_errors || []).length }); });
+                },
+                function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+            );
         }
-        if (panel.cachedAi) {
-            this.setState({
-                aiScore: panel.cachedAi.score || null,
-                aiGrade: panel.cachedAi.grade || null,
-            });
+
+        function runReadability() {
+            setState(function (s) { return Object.assign({}, s, { loading: true, loadingType: 'read', error: '' }); });
+            ajaxPost('cqa_readability', { content: getContent() },
+                function (data) {
+                    setState(function (s) { return Object.assign({}, s, {
+                        loading:         false,
+                        readScore:       data.score || null,
+                        readGrade:       data.grade || null,
+                        topImprovements: data.top_improvements || [],
+                    }); });
+                },
+                function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+            );
         }
-        if (panel.cachedSpell) {
-            this.setState({
-                spellErrors: (panel.cachedSpell.spelling_errors || []).length,
-            });
+
+        function runAI() {
+            setState(function (s) { return Object.assign({}, s, { loading: true, loadingType: 'ai', error: '' }); });
+            ajaxPost('cqa_ai_friendly', { content: getContent(), post_title: getTitle() },
+                function (data) {
+                    setState(function (s) { return Object.assign({}, s, {
+                        loading:  false,
+                        aiScore:  data.score || null,
+                        aiGrade:  data.grade || null,
+                    }); });
+                },
+                function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+            );
         }
-    };
 
-    CqaSidebar.prototype.runSpell = function () {
-        var self = this;
-        self.setState({ loading: true, loadingType: 'spell', error: '' });
-        ajaxPost('cqa_spell_check', { content: getContent() },
-            function (data) {
-                self.setState({ loading: false, spellErrors: (data.spelling_errors || []).length });
-            },
-            function (err) { self.setState({ loading: false, error: err }); }
-        );
-    };
+        function runAll() {
+            var content = getContent();
+            var title   = getTitle();
+            setState(function (s) { return Object.assign({}, s, { loading: true, loadingType: 'all', error: '' }); });
 
-    CqaSidebar.prototype.runReadability = function () {
-        var self = this;
-        self.setState({ loading: true, loadingType: 'read', error: '' });
-        ajaxPost('cqa_readability', { content: getContent() },
-            function (data) {
-                self.setState({
-                    loading:         false,
-                    readScore:       data.score || null,
-                    readGrade:       data.grade || null,
-                    topImprovements: data.top_improvements || [],
-                });
-            },
-            function (err) { self.setState({ loading: false, error: err }); }
-        );
-    };
+            ajaxPost('cqa_spell_check', { content: content },
+                function (d1) {
+                    setState(function (s) { return Object.assign({}, s, { spellErrors: (d1.spelling_errors || []).length }); });
+                    ajaxPost('cqa_readability', { content: content },
+                        function (d2) {
+                            setState(function (s) { return Object.assign({}, s, { readScore: d2.score, readGrade: d2.grade, topImprovements: d2.top_improvements || [] }); });
+                            ajaxPost('cqa_ai_friendly', { content: content, post_title: title },
+                                function (d3) {
+                                    setState(function (s) { return Object.assign({}, s, { loading: false, aiScore: d3.score, aiGrade: d3.grade }); });
+                                },
+                                function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+                            );
+                        },
+                        function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+                    );
+                },
+                function (err) { setState(function (s) { return Object.assign({}, s, { loading: false, error: err }); }); }
+            );
+        }
 
-    CqaSidebar.prototype.runAI = function () {
-        var self = this;
-        self.setState({ loading: true, loadingType: 'ai', error: '' });
-        ajaxPost('cqa_ai_friendly', { content: getContent(), post_title: getTitle() },
-            function (data) {
-                self.setState({
-                    loading:  false,
-                    aiScore:  data.score || null,
-                    aiGrade:  data.grade || null,
-                });
-            },
-            function (err) { self.setState({ loading: false, error: err }); }
-        );
-    };
+        /* ── render helpers ── */
 
-    CqaSidebar.prototype.runAll = function () {
-        var self = this;
-        var content = getContent();
-        var title   = getTitle();
-        self.setState({ loading: true, loadingType: 'all', error: '' });
-
-        ajaxPost('cqa_spell_check', { content: content },
-            function (d1) {
-                self.setState({ spellErrors: (d1.spelling_errors || []).length });
-                ajaxPost('cqa_readability', { content: content },
-                    function (d2) {
-                        self.setState({ readScore: d2.score, readGrade: d2.grade, topImprovements: d2.top_improvements || [] });
-                        ajaxPost('cqa_ai_friendly', { content: content, post_title: title },
-                            function (d3) {
-                                self.setState({ loading: false, aiScore: d3.score, aiGrade: d3.grade });
-                            },
-                            function (err) { self.setState({ loading: false, error: err }); }
-                        );
-                    },
-                    function (err) { self.setState({ loading: false, error: err }); }
-                );
-            },
-            function (err) { self.setState({ loading: false, error: err }); }
-        );
-    };
-
-    CqaSidebar.prototype.render = function () {
-        var s    = this.state;
-        var self = this;
-
-        /* ── helpers ── */
         function scoreBox(label, score, grade) {
             if (score === null || score === undefined) {
                 return el('div', {
@@ -176,23 +164,24 @@
             );
         }
 
-        var spellBox = s.spellErrors !== null && s.spellErrors !== undefined
+        var spellLabel = i18n.sidebarSpelling || 'Spelling';
+        var spellBox = state.spellErrors !== null && state.spellErrors !== undefined
             ? el('div', {
-                style: { marginBottom: '8px', padding: '8px 12px', background: s.spellErrors === 0 ? '#f0fdf4' : '#fef2f2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+                style: { marginBottom: '8px', padding: '8px 12px', background: state.spellErrors === 0 ? '#f0fdf4' : '#fef2f2', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
             },
-                el('span', { style: { fontSize: '12px', color: '#475569', fontWeight: '600' } }, 'Pisownia'),
-                el('span', { style: { fontSize: '14px', fontWeight: '700', color: s.spellErrors === 0 ? '#16a34a' : '#dc2626' } },
-                    s.spellErrors === 0 ? '✓ Brak błędów' : s.spellErrors + ' błędów'
+                el('span', { style: { fontSize: '12px', color: '#475569', fontWeight: '600' } }, spellLabel),
+                el('span', { style: { fontSize: '14px', fontWeight: '700', color: state.spellErrors === 0 ? '#16a34a' : '#dc2626' } },
+                    state.spellErrors === 0 ? (i18n.sidebarNoErrors || '✓ No errors') : state.spellErrors + ' ' + (i18n.errorsLabel || 'errors')
                 )
             )
             : el('div', {
                 style: { marginBottom: '8px', padding: '8px 12px', background: '#f8fafc', borderRadius: '6px', fontSize: '12px', color: '#94a3b8' },
-            }, 'Pisownia: —');
+            }, spellLabel + ': —');
 
         var btnBase = {
             padding: '7px 10px', border: '1px solid #d0d5dd', borderRadius: '6px',
-            background: '#fff', cursor: s.loading ? 'not-allowed' : 'pointer',
-            fontSize: '12px', fontWeight: '600', opacity: s.loading ? '0.6' : '1',
+            background: '#fff', cursor: state.loading ? 'not-allowed' : 'pointer',
+            fontSize: '12px', fontWeight: '600', opacity: state.loading ? '0.6' : '1',
         };
         var btnPrimary = Object.assign({}, btnBase, {
             display: 'block', width: '100%', marginBottom: '6px',
@@ -202,64 +191,62 @@
 
         return el(PluginSidebar, {
             name:  'cqa-sidebar',
-            title: '✍️ Analizator Treści',
+            title: i18n.sidebarTitle || 'Content Analyzer',
             icon:  'editor-spell',
         },
             el('div', { style: { padding: '12px 16px', fontFamily: 'system-ui,-apple-system,sans-serif' } },
 
                 spellBox,
-                scoreBox('Czytelność', s.readScore, s.readGrade),
-                scoreBox('AI-Friendly', s.aiScore, s.aiGrade),
+                scoreBox(i18n.histRead || 'Readability', state.readScore, state.readGrade),
+                scoreBox('AI-Friendly', state.aiScore, state.aiGrade),
 
-                s.topImprovements.length > 0 && el('div', {
+                state.topImprovements.length > 0 && el('div', {
                     style: { marginBottom: '12px', padding: '8px 12px', background: '#fffbeb', borderRadius: '6px' },
                 },
-                    el('div', { style: { fontSize: '10px', fontWeight: '700', color: '#92400e', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' } }, 'Priorytety poprawy'),
-                    s.topImprovements.map(function (t, i) {
-                        return el('div', { key: i, style: { fontSize: '11px', color: '#78350f', marginBottom: '2px' } }, (i + 1) + '. ' + t);
+                    el('div', { style: { fontSize: '10px', fontWeight: '700', color: '#92400e', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' } }, i18n.sidebarImprov || 'Improvement priorities'),
+                    state.topImprovements.map(function (t, idx) {
+                        return el('div', { key: idx, style: { fontSize: '11px', color: '#78350f', marginBottom: '2px' } }, (idx + 1) + '. ' + t);
                     })
                 ),
 
-                s.error && el('div', {
+                state.error && el('div', {
                     style: { marginBottom: '8px', padding: '6px 10px', background: '#fef2f2', borderRadius: '4px', fontSize: '11px', color: '#dc2626' },
-                }, s.error),
+                }, state.error),
 
                 el('button', {
                     style:    btnPrimary,
-                    onClick:  s.loading ? null : self.runAll,
-                    disabled: s.loading,
-                }, s.loading && s.loadingType === 'all' ? '⏳ Analizuję…' : '✨ Analizuj wszystko'),
+                    onClick:  state.loading ? null : runAll,
+                    disabled: state.loading,
+                }, state.loading && state.loadingType === 'all' ? '⏳ ' + (i18n.analyzing || 'Analyzing…') : '✨ ' + (i18n.analyzeAll || 'Analyze all')),
 
                 el('div', { style: { display: 'flex', gap: '4px', marginBottom: '8px' } },
                     el('button', {
                         style:    Object.assign({}, btnBase, { flex: '1', textAlign: 'center' }),
-                        onClick:  s.loading ? null : self.runSpell,
-                        disabled: s.loading,
-                        title:    'Sprawdź pisownię',
-                    }, s.loading && s.loadingType === 'spell' ? '…' : '🔤'),
+                        onClick:  state.loading ? null : runSpell,
+                        disabled: state.loading,
+                        title:    i18n.checkSpell || 'Check spelling',
+                    }, state.loading && state.loadingType === 'spell' ? '…' : '🔤'),
                     el('button', {
                         style:    Object.assign({}, btnBase, { flex: '1', textAlign: 'center' }),
-                        onClick:  s.loading ? null : self.runReadability,
-                        disabled: s.loading,
-                        title:    'Analizuj czytelność',
-                    }, s.loading && s.loadingType === 'read' ? '…' : '📊'),
+                        onClick:  state.loading ? null : runReadability,
+                        disabled: state.loading,
+                        title:    i18n.analyzeRead || 'Analyze readability',
+                    }, state.loading && state.loadingType === 'read' ? '…' : '📊'),
                     el('button', {
                         style:    Object.assign({}, btnBase, { flex: '1', textAlign: 'center' }),
-                        onClick:  s.loading ? null : self.runAI,
-                        disabled: s.loading,
-                        title:    'Sprawdź AI-Friendly',
-                    }, s.loading && s.loadingType === 'ai' ? '…' : '🤖')
+                        onClick:  state.loading ? null : runAI,
+                        disabled: state.loading,
+                        title:    i18n.checkAI || 'Check AI-Friendly',
+                    }, state.loading && state.loadingType === 'ai' ? '…' : '🤖')
                 ),
 
                 panel.settingsUrl && el('div', { style: { textAlign: 'center' } },
-                    el('a', { href: panel.settingsUrl, style: { fontSize: '11px', color: '#94a3b8', textDecoration: 'none' } }, '⚙️ Ustawienia →')
+                    el('a', { href: panel.settingsUrl, style: { fontSize: '11px', color: '#94a3b8', textDecoration: 'none' } }, i18n.sidebarSettings || 'Settings →')
                 )
             )
         );
-    };
+    }
 
-    registerPlugin('cqa-sidebar', {
-        render: function () { return el(CqaSidebar, null); },
-    });
+    registerPlugin('cqa-sidebar', { render: CqaSidebar });
 
 }());

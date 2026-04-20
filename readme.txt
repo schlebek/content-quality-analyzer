@@ -3,7 +3,7 @@ Contributors: schlebek
 Tags: content, ai, spelling, readability, seo
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,17 @@ The plugin tracks cumulative token usage and displays an estimated USD cost on t
 5. Plugin settings page — API key and model selection.
 
 == Changelog ==
+
+= 1.4.0 =
+* Rewrote all 5 Gemini API prompts from Polish to language-neutral English — AI now responds in the same language as the input text.
+* Added full JS i18n via `wp_localize_script()` — ~100 translated strings passed to JavaScript (metabox, admin, sidebar).
+* Replaced all inline CSS `style=` attributes in render functions with proper CSS classes.
+* Replaced `alert()` / `confirm()` dialogs with inline UI messages and inline confirmation pattern.
+* Modernized Gutenberg sidebar from ES5 prototype-based class to functional component using `wp.element.useState` hooks.
+* Added client-side pagination (25 items/page) to Posts Overview — replaces unlimited `posts_per_page: 200` load.
+* Added "Copy all fixes" button to Spelling Corrector results.
+* Added SVG sparkline chart in Analysis History showing readability and AI-Friendly score trends over time.
+* Updated translations for all 9 locales with new string keys.
 
 = 1.3.0 =
 * Added translations: German, French, Spanish, Italian, Portuguese (Brazil), Russian, Ukrainian, Dutch, Czech.

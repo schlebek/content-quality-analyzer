@@ -3,6 +3,7 @@
     'use strict';
 
     var panel = window.cqaPanel || {};
+    var i18n  = panel.i18n || {};
 
     /* ── Editor helpers ───────────────────────────────────── */
 
@@ -46,16 +47,15 @@
         $b.text(text).attr('class', 'cqa-badge ' + cls).show();
     }
 
-    /* ── Score circle ─────────────────────────────────────── */
+    /* ── Score circle (uses CSS custom property for color) ── */
 
     function scoreCircle(score, grade, color) {
-        return '<div style="text-align:center; flex-shrink:0;">'
-            + '<div style="width:72px; height:72px; border-radius:50%; border:5px solid ' + color + '; '
-            + 'display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 4px;">'
-            + '<span style="font-size:22px; font-weight:800; color:' + color + '; line-height:1;">' + score + '</span>'
-            + '<span style="font-size:9px; color:#94a3b8; line-height:1;">/ 100</span>'
+        return '<div class="cqa-score-ring-wrap">'
+            + '<div class="cqa-score-ring" style="--cqa-ring:' + color + '">'
+            + '<span class="cqa-score-value">' + score + '</span>'
+            + '<span class="cqa-score-suffix">/ 100</span>'
             + '</div>'
-            + '<div style="font-size:13px; font-weight:700; color:' + color + ';">' + esc(grade) + '</div>'
+            + '<div class="cqa-score-grade" style="color:' + color + '">' + esc(grade) + '</div>'
             + '</div>';
     }
 
@@ -82,10 +82,10 @@
             if (res.success) {
                 success(res.data);
             } else {
-                fail(res.data || 'Nieznany błąd');
+                fail(res.data || i18n.unknownError || 'Unknown error');
             }
         }).fail(function () {
-            fail('Błąd połączenia z serwerem.');
+            fail(i18n.connectionError || 'Connection error.');
         });
     }
 
@@ -111,18 +111,20 @@
         var $actions = $('#cqa-spell-actions');
 
         $list.empty();
+        $('#cqa-spell-copy-all').remove();
 
         if (!errors.length) {
             $empty.show();
             $actions.hide();
-            setBadge('cqa-badge-spell', '0 błędów', 'badge-green');
+            setBadge('cqa-badge-spell', i18n.zeroErrors || '0 errors', 'badge-green');
             return;
         }
 
         $empty.hide();
         $actions.show();
 
-        var typeColors = { ortografia: '#dc2626', gramatyka: '#d97706', interpunkcja: '#7c3aed', styl: '#0369a1' };
+        var typeColors = { ortografia: '#dc2626', gramatyka: '#d97706', interpunkcja: '#7c3aed', styl: '#0369a1',
+                           spelling: '#dc2626', grammar: '#d97706', punctuation: '#7c3aed', style: '#0369a1' };
 
         $.each(errors, function (i, err) {
             var color = typeColors[err.type] || '#475569';
@@ -150,17 +152,42 @@
 
             $row.append(
                 $('<div>').addClass('cqa-spell-btns').append(
-                    $('<button type="button">').addClass('cqa-spell-go button').css('font-size', '11px').html('🔍 Znajdź'),
-                    $('<button type="button">').addClass('cqa-spell-fix button').css('font-size', '11px').html('✓ Popraw')
+                    $('<button type="button">').addClass('cqa-spell-go button').css('font-size', '11px').html('🔍 ' + (i18n.find || 'Find')),
+                    $('<button type="button">').addClass('cqa-spell-fix button').css('font-size', '11px').html('✓ ' + (i18n.fix || 'Fix'))
                 )
             );
 
             $list.append($row);
         });
 
+        // Copy-all-fixes button
+        var $copyAll = $('<button type="button" id="cqa-spell-copy-all">')
+            .addClass('button cqa-copy-all-btn')
+            .css('font-size', '11px')
+            .html('📋 ' + (i18n.copyAllFixes || 'Copy all fixes'));
+        $list.before($copyAll);
+
         var cls = errors.length > 10 ? 'badge-red' : (errors.length > 4 ? 'badge-orange' : 'badge-yellow');
-        setBadge('cqa-badge-spell', errors.length + ' błędów', cls);
+        setBadge('cqa-badge-spell', errors.length + ' ' + (i18n.errorsLabel || 'errors'), cls);
     }
+
+    $(document).on('click', '#cqa-spell-copy-all', function () {
+        var lines = [];
+        $('.cqa-spell-row').each(function () {
+            var wrong   = $(this).data('wrong');
+            var correct = $(this).data('correct');
+            if (wrong && correct) lines.push(wrong + ' → ' + correct);
+        });
+        if (!lines.length) return;
+        var text = lines.join('\n');
+        var $btn = $(this);
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(function () {
+                $btn.text('✓ ' + (i18n.copied || 'Copied!'));
+                setTimeout(function () { $btn.html('📋 ' + (i18n.copyAllFixes || 'Copy all fixes')); }, 2000);
+            });
+        }
+    });
 
     function fixSpellInEditor(wrong, correct, $row) {
         var escaped = wrong.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -186,7 +213,7 @@
                 $row.slideUp(200, function () { $(this).remove(); checkSpellEmpty(); });
             }, 500);
         } else {
-            $row.find('.cqa-spell-fix').text('Nie znaleziono').prop('disabled', true);
+            $row.find('.cqa-spell-fix').text(i18n.notFound || 'Not found').prop('disabled', true);
         }
     }
 
@@ -212,6 +239,7 @@
     function checkSpellEmpty() {
         if ($('#cqa-spell-list .cqa-spell-row:not(.cqa-spell-fixed)').length === 0) {
             $('#cqa-spell-list').empty();
+            $('#cqa-spell-copy-all').remove();
             $('#cqa-spell-empty').show();
             $('#cqa-spell-actions').hide();
         }
@@ -263,74 +291,70 @@
         var grade = d.grade || '?';
         var color = gradeColor(score);
 
-        var html = '<div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; margin-bottom:14px;">';
+        var html = '<div class="cqa-score-header">';
         html += scoreCircle(score, grade, color);
-        html += '<div style="flex:1; min-width:0;">'
-            + '<div style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:2px;">' + esc(d.reading_level || '') + '</div>'
-            + '<div style="font-size:12px; color:#64748b; margin-bottom:8px;">' + esc(d.reading_level_description || '') + '</div>'
-            + '<div style="font-size:12px; color:#475569;">⏱ Czas czytania: <strong>~' + esc(d.reading_time_minutes || '?') + ' min</strong></div>'
+        html += '<div class="cqa-score-meta">'
+            + '<div class="cqa-score-level">' + esc(d.reading_level || '') + '</div>'
+            + '<div class="cqa-score-desc">' + esc(d.reading_level_description || '') + '</div>'
+            + '<div class="cqa-score-reading-time">⏱ ' + (i18n.readingTime || 'Reading time:') + ' <strong>~' + esc(d.reading_time_minutes || '?') + ' min</strong></div>'
             + '</div></div>';
 
         var metrics = [
-            { label: 'Słów',               val: d.word_count },
-            { label: 'Zdań',               val: d.sentence_count },
-            { label: 'Akapitów',           val: d.paragraph_count },
-            { label: 'Śr. dł. zdania',     val: d.avg_sentence_length   ? d.avg_sentence_length + ' słów' : null },
-            { label: 'Długie zdania',      val: d.long_sentences_count  !== undefined ? d.long_sentences_count  + ' (>30 słów)' : null },
-            { label: 'Krótkie zdania',     val: d.short_sentences_count !== undefined ? d.short_sentences_count + ' (<8 słów)'  : null },
-            { label: 'Strona bierna',      val: d.passive_voice_pct     !== undefined ? d.passive_voice_pct     + '%' : null },
-            { label: 'Trudne słowa',       val: d.complex_words_pct     !== undefined ? d.complex_words_pct     + '%' : null },
-            { label: 'Słownictwo',         val: d.vocabulary_richness },
-            { label: 'Nagłówki H2/H3',    val: d.heading_count         !== undefined ? d.heading_count + ' (' + (d.heading_structure || '?') + ')' : null },
-            { label: 'Struktura akapitów', val: d.paragraph_structure },
-            { label: 'Spójniki',           val: d.connective_words_quality },
-            { label: 'Przepływ logiczny',  val: d.logical_flow_score    !== undefined ? d.logical_flow_score    + '/10' : null },
-            { label: 'Zaangażowanie',      val: d.emotional_engagement },
-            { label: 'Jasność',            val: d.clarity_score         !== undefined ? d.clarity_score         + '/10' : null },
-            { label: 'Zwięzłość',          val: d.conciseness_score     !== undefined ? d.conciseness_score     + '/10' : null },
-            { label: 'Żargon',             val: d.jargon_density },
-            { label: 'Zróżnicowanie zdań', val: d.sentence_variety },
+            { label: i18n.words         || 'Words',           val: d.word_count },
+            { label: i18n.sentences     || 'Sentences',       val: d.sentence_count },
+            { label: i18n.paragraphs    || 'Paragraphs',      val: d.paragraph_count },
+            { label: i18n.avgSentence   || 'Avg. sentence',   val: d.avg_sentence_length   !== undefined ? d.avg_sentence_length + ' ' + (i18n.words || 'words').toLowerCase() : null },
+            { label: i18n.longSentences || 'Long sentences',  val: d.long_sentences_count  !== undefined ? d.long_sentences_count  + ' (>30)' : null },
+            { label: i18n.shortSentences|| 'Short sentences', val: d.short_sentences_count !== undefined ? d.short_sentences_count + ' (<8)'  : null },
+            { label: i18n.passiveVoice  || 'Passive voice',   val: d.passive_voice_pct     !== undefined ? d.passive_voice_pct     + '%' : null },
+            { label: i18n.complexWords  || 'Complex words',   val: d.complex_words_pct     !== undefined ? d.complex_words_pct     + '%' : null },
+            { label: i18n.vocabulary    || 'Vocabulary',      val: d.vocabulary_richness },
+            { label: i18n.headingsH23   || 'H2/H3 headings', val: d.heading_count !== undefined ? d.heading_count + ' (' + (d.heading_structure || '?') + ')' : null },
+            { label: i18n.paraStructure || 'Para. structure', val: d.paragraph_structure },
+            { label: i18n.connectives   || 'Connectives',     val: d.connective_words_quality },
+            { label: i18n.logicalFlow   || 'Logical flow',    val: d.logical_flow_score    !== undefined ? d.logical_flow_score    + '/10' : null },
+            { label: i18n.engagement    || 'Engagement',      val: d.emotional_engagement },
+            { label: i18n.clarity       || 'Clarity',         val: d.clarity_score         !== undefined ? d.clarity_score         + '/10' : null },
+            { label: i18n.conciseness   || 'Conciseness',     val: d.conciseness_score     !== undefined ? d.conciseness_score     + '/10' : null },
+            { label: i18n.jargon        || 'Jargon',          val: d.jargon_density },
+            { label: i18n.sentVariety   || 'Sent. variety',   val: d.sentence_variety },
         ];
 
-        html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-bottom:12px;">';
+        html += '<div class="cqa-metrics-grid">';
         $.each(metrics, function (i, m) {
             if (m.val === null || m.val === undefined) return;
-            html += '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:5px; padding:5px 9px; font-size:11px;">'
-                + '<span style="color:#64748b;">' + esc(m.label) + ': </span>'
-                + '<strong style="color:#1e293b;">' + esc(m.val) + '</strong>'
-                + '</div>';
+            html += '<div class="cqa-metric-item"><span class="cqa-metric-label">' + esc(m.label) + ': </span>'
+                + '<strong class="cqa-metric-value">' + esc(m.val) + '</strong></div>';
         });
         html += '</div>';
 
         if (d.strengths && d.strengths.length) {
-            html += '<div style="margin-bottom:10px;">'
-                + '<div style="font-size:11px; font-weight:700; color:#16a34a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">Mocne strony</div>';
+            html += '<div class="cqa-result-section">'
+                + '<div class="cqa-section-label cqa-section-label--green">' + (i18n.strengths || 'Strengths') + '</div>';
             $.each(d.strengths, function (i, s) {
-                html += '<div style="font-size:12px; color:#166534; margin-bottom:2px;">✅ ' + esc(s) + '</div>';
+                html += '<div class="cqa-strength-item">✅ ' + esc(s) + '</div>';
             });
             html += '</div>';
         }
 
         if (d.issues && d.issues.length) {
-            html += '<div style="margin-bottom:10px;">'
-                + '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">Problemy</div>';
-            var sevColor = { high: '#dc2626', medium: '#d97706', low: '#64748b' };
+            html += '<div class="cqa-result-section">'
+                + '<div class="cqa-section-label cqa-section-label--gray">' + (i18n.issuesLabel || 'Issues') + '</div>';
             $.each(d.issues, function (i, iss) {
-                var sc = sevColor[iss.severity] || '#64748b';
-                html += '<div style="border-left:3px solid ' + sc + '; padding:6px 10px; background:#f8fafc; border-radius:0 4px 4px 0; margin-bottom:5px; font-size:12px;">'
-                    + '<div style="font-weight:600; color:#1e293b;">' + esc(iss.description) + '</div>'
-                    + (iss.suggestion ? '<div style="color:#64748b; margin-top:2px;">💡 ' + esc(iss.suggestion) + '</div>' : '')
+                html += '<div class="cqa-issue-item cqa-issue-item--' + esc(iss.severity || 'low') + '">'
+                    + '<div class="cqa-issue-desc">' + esc(iss.description) + '</div>'
+                    + (iss.suggestion ? '<div class="cqa-issue-suggestion">💡 ' + esc(iss.suggestion) + '</div>' : '')
                     + '</div>';
             });
             html += '</div>';
         }
 
         if (d.top_improvements && d.top_improvements.length) {
-            html += '<div>'
-                + '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">Top 3 priorytety poprawy</div>'
-                + '<ol style="margin:0; padding-left:18px; font-size:12px; color:#475569;">';
+            html += '<div class="cqa-result-section">'
+                + '<div class="cqa-section-label cqa-section-label--gray">' + (i18n.topImprovements || 'Top improvements') + '</div>'
+                + '<ol class="cqa-top-improvements">';
             $.each(d.top_improvements, function (i, imp) {
-                html += '<li style="margin-bottom:3px;">' + esc(imp) + '</li>';
+                html += '<li>' + esc(imp) + '</li>';
             });
             html += '</ol></div>';
         }
@@ -353,28 +377,26 @@
         var tops     = d.top_improvements || [];
         var color    = gradeColor(score);
 
-        var html = '<div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; margin-bottom:14px;">';
+        var html = '<div class="cqa-score-header">';
         html += scoreCircle(score, grade, color);
-        html += '<div style="flex:1; min-width:0;">';
+        html += '<div class="cqa-score-meta">';
         if (summary) {
             html += '<p style="font-size:12px; color:#475569; margin:0 0 8px; line-height:1.5;">' + esc(summary) + '</p>';
         }
         if (tops.length) {
-            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">Priorytety poprawy</div>'
-                + '<ol style="margin:0; padding-left:18px; font-size:12px; color:#475569;">';
-            $.each(tops, function (i, t) { html += '<li style="margin-bottom:2px;">' + esc(t) + '</li>'; });
+            html += '<div class="cqa-section-label cqa-section-label--gray">' + (i18n.improvPriorities || 'Improvement priorities') + '</div>'
+                + '<ol class="cqa-top-improvements">';
+            $.each(tops, function (i, t) { html += '<li>' + esc(t) + '</li>'; });
             html += '</ol>';
         }
         html += '</div></div>';
 
-        html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">';
+        html += '<div class="cqa-criteria-grid">';
         $.each(criteria, function (i, c) {
             var icon = c.status === 'pass' ? '✅' : (c.status === 'warn' ? '⚠️' : '❌');
-            var bg   = c.status === 'pass' ? '#f0fdf4' : (c.status === 'warn' ? '#fffbeb' : '#fef2f2');
-            var bdr  = c.status === 'pass' ? '#bbf7d0' : (c.status === 'warn' ? '#fde68a' : '#fecaca');
-            html += '<div style="background:' + bg + '; border:1px solid ' + bdr + '; border-radius:6px; padding:6px 9px; font-size:11px;">'
-                + '<div style="font-weight:600; color:#1e293b; margin-bottom:1px;">' + icon + ' ' + esc(c.label || c.id) + '</div>'
-                + (c.note ? '<div style="color:#64748b; font-size:10px;">' + esc(c.note) + '</div>' : '')
+            html += '<div class="cqa-criterion cqa-criterion--' + esc(c.status || 'fail') + '">'
+                + '<div class="cqa-criterion-label">' + icon + ' ' + esc(c.label || c.id) + '</div>'
+                + (c.note ? '<div class="cqa-criterion-note">' + esc(c.note) + '</div>' : '')
                 + '</div>';
         });
         html += '</div>';
@@ -422,10 +444,10 @@
     }
 
     function analyzeHeadings(headings) {
-        var issues   = [];
-        var h1Count  = 0;
-        var h2Count  = 0;
-        var h3Count  = 0;
+        var issues  = [];
+        var h1Count = 0;
+        var h2Count = 0;
+        var h3Count = 0;
 
         $.each(headings, function (i, h) {
             if (h.level === 1) h1Count++;
@@ -434,20 +456,19 @@
         });
 
         if (h1Count === 0) {
-            issues.push({ type: 'warn', msg: 'Brak nagłówka H1.' });
+            issues.push({ type: 'warn', msg: i18n.headingNoH1 || 'No H1 heading.' });
         } else if (h1Count > 1) {
-            issues.push({ type: 'fail', msg: 'Więcej niż jeden H1 (' + h1Count + ').' });
+            issues.push({ type: 'fail', msg: (i18n.headingMultiH1 || 'More than one H1') + ' (' + h1Count + ').' });
         }
 
         if (h2Count === 0 && headings.length > 0) {
-            issues.push({ type: 'warn', msg: 'Brak nagłówków H2 — dodaj sekcje.' });
+            issues.push({ type: 'warn', msg: i18n.headingNoH2 || 'No H2 headings — add sections.' });
         }
 
-        // Check for skipped levels
         for (var i = 1; i < headings.length; i++) {
             var diff = headings[i].level - headings[i - 1].level;
             if (diff > 1) {
-                issues.push({ type: 'warn', msg: 'Pominięty poziom po "' + (headings[i - 1].text.substring(0, 30) || '...') + '".' });
+                issues.push({ type: 'warn', msg: (i18n.headingSkipped || 'Skipped level after') + ' "' + (headings[i - 1].text.substring(0, 30) || '...') + '".' });
             }
         }
 
@@ -461,23 +482,22 @@
     }
 
     function renderHeadings(result) {
-        var score  = result.score;
-        var color  = gradeColor(score);
-        var $wrap  = $('#cqa-headings-results');
-
-        var grade  = score >= 80 ? 'A' : (score >= 60 ? 'B' : (score >= 40 ? 'C' : 'D'));
-        var cls    = score >= 80 ? 'badge-green' : (score >= 60 ? 'badge-yellow' : (score >= 40 ? 'badge-orange' : 'badge-red'));
+        var score = result.score;
+        var color = gradeColor(score);
+        var $wrap = $('#cqa-headings-results');
+        var grade = score >= 80 ? 'A' : (score >= 60 ? 'B' : (score >= 40 ? 'C' : 'D'));
+        var cls   = score >= 80 ? 'badge-green' : (score >= 60 ? 'badge-yellow' : (score >= 40 ? 'badge-orange' : 'badge-red'));
         setBadge('cqa-badge-headings', 'H1:' + result.h1 + ' H2:' + result.h2 + ' H3:' + result.h3, cls);
 
-        var html = '<div style="display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; margin-bottom:10px;">'
+        var html = '<div class="cqa-score-header">'
             + scoreCircle(score, grade, color)
-            + '<div style="flex:1; min-width:0;">';
+            + '<div class="cqa-score-meta">';
 
         if (result.issues.length === 0) {
-            html += '<p style="color:#16a34a; font-size:12px;">✅ Struktura nagłówków jest poprawna.</p>';
+            html += '<p style="color:#16a34a; font-size:12px;">✅ ' + (i18n.headingOk || 'Heading structure is correct.') + '</p>';
         } else {
             $.each(result.issues, function (i, iss) {
-                var ic = iss.type === 'fail' ? '#dc2626' : '#d97706';
+                var ic   = iss.type === 'fail' ? '#dc2626' : '#d97706';
                 var icon = iss.type === 'fail' ? '❌' : '⚠️';
                 html += '<div style="font-size:12px; color:' + ic + '; margin-bottom:4px;">' + icon + ' ' + esc(iss.msg) + '</div>';
             });
@@ -489,14 +509,14 @@
             html += '<div class="cqa-heading-tree">';
             $.each(result.headings, function (i, h) {
                 var indent = (h.level - 1) * 14;
-                html += '<div style="padding:2px 0 2px ' + indent + 'px; font-size:11px; color:#1e293b; border-left:2px solid #e2e8f0; margin-left:' + (indent > 0 ? 0 : 0) + 'px;">'
+                html += '<div style="padding:2px 0 2px ' + indent + 'px; font-size:11px; color:#1e293b; border-left:2px solid #e2e8f0;">'
                     + '<span style="color:#94a3b8; font-size:10px; margin-right:4px;">H' + h.level + '</span>'
-                    + esc(h.text.substring(0, 60) || '(brak tekstu)')
+                    + esc(h.text.substring(0, 60) || (i18n.noText || '(no text)'))
                     + '</div>';
             });
             html += '</div>';
         } else {
-            html += '<p style="font-size:12px; color:#94a3b8;">Nie znaleziono nagłówków w treści.</p>';
+            html += '<p style="font-size:12px; color:#94a3b8;">' + (i18n.noHeadings || 'No headings found in content.') + '</p>';
         }
 
         $wrap.html(html);
@@ -504,7 +524,7 @@
 
     $(document).on('click', '#cqa-btn-headings', function () {
         if (!isGutenberg() && !isClassicEditor() && !extractContent().trim()) {
-            $('#cqa-headings-results').html('<p style="color:#94a3b8; font-size:12px;">Brak treści.</p>');
+            $('#cqa-headings-results').html('<p style="color:#94a3b8; font-size:12px;">' + (i18n.noContent || 'No content.') + '</p>');
             return;
         }
         var headings = parseHeadings();
@@ -521,30 +541,27 @@
         var html = '';
 
         if (d.one_line) {
-            html += '<div style="background:#6366f1; color:#fff; border-radius:6px; padding:8px 12px; margin-bottom:10px; font-size:13px; font-weight:600;">'
-                + esc(d.one_line)
-                + '</div>';
+            html += '<div class="cqa-one-liner">' + esc(d.one_line) + '</div>';
         }
 
         if (d.tldr) {
-            html += '<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 14px; margin-bottom:10px;">'
-                + '<div style="font-size:10px; font-weight:700; color:#16a34a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">TL;DR</div>'
-                + '<div style="font-size:13px; color:#166534; line-height:1.5;">' + esc(d.tldr) + '</div>'
+            html += '<div class="cqa-tldr-box">'
+                + '<div class="cqa-tldr-label">TL;DR</div>'
+                + '<div class="cqa-tldr-text">' + esc(d.tldr) + '</div>'
                 + '</div>';
         }
 
         if (d.key_points && d.key_points.length) {
-            html += '<div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Kluczowe punkty</div>'
-                + '<ul style="margin:0; padding-left:18px;">';
+            html += '<div class="cqa-key-points-label">' + (i18n.keyPoints || 'Key points') + '</div>'
+                + '<ul class="cqa-key-points-list">';
             $.each(d.key_points, function (i, p) {
-                html += '<li style="font-size:12px; color:#1e293b; margin-bottom:4px;">' + esc(p) + '</li>';
+                html += '<li>' + esc(p) + '</li>';
             });
             html += '</ul>';
         }
 
-        // Copy button
         if (d.tldr) {
-            html += '<button type="button" class="button cqa-copy-tldr" style="margin-top:10px; font-size:11px;" data-text="' + esc(d.tldr) + '">📋 Kopiuj TL;DR</button>';
+            html += '<button type="button" class="button cqa-copy-tldr" style="margin-top:10px; font-size:11px;" data-text="' + esc(d.tldr) + '">📋 ' + (i18n.copyTldr || 'Copy TL;DR') + '</button>';
         }
 
         $('#cqa-tldr-output').html(html);
@@ -553,21 +570,21 @@
     $(document).on('click', '#cqa-btn-tldr', function () {
         var $btn    = $(this);
         var content = extractContent();
-        if (!content.trim()) { $('#cqa-tldr-status').text('Brak treści.'); return; }
+        if (!content.trim()) { $('#cqa-tldr-status').text(i18n.noContent || 'No content.'); return; }
 
-        $btn.prop('disabled', true).text('Generuję…');
+        $btn.prop('disabled', true).text(i18n.generating || 'Generating…');
         $('#cqa-tldr-status').text('');
         $('#cqa-tldr-output').html('');
 
         ajaxPost('cqa_generate_tldr', { content: content },
             function (data) {
-                $btn.prop('disabled', false).text('📝 Generuj TL;DR');
+                $btn.prop('disabled', false).text('📝 ' + ($('[data-btn-tldr]').text() || 'Generate TL;DR'));
                 renderTldr(data);
                 $('#cqa-section-tldr .cqa-section-body').slideDown(200);
             },
             function (err) {
-                $btn.prop('disabled', false).text('📝 Generuj TL;DR');
-                $('#cqa-tldr-status').text('Błąd: ' + err);
+                $btn.prop('disabled', false).text('📝 ' + ($('[data-btn-tldr]').text() || 'Generate TL;DR'));
+                $('#cqa-tldr-status').text((i18n.errPrefix || 'Error: ') + err);
             }
         );
     });
@@ -575,13 +592,11 @@
     $(document).on('click', '.cqa-copy-tldr', function () {
         var text = $(this).data('text');
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(function () {
-                // success
-            });
+            navigator.clipboard.writeText(text);
         }
-        $(this).text('✓ Skopiowano!');
+        $(this).text('✓ ' + (i18n.copied || 'Copied!'));
         var $btn = $(this);
-        setTimeout(function () { $btn.text('📋 Kopiuj TL;DR'); }, 2000);
+        setTimeout(function () { $btn.text('📋 ' + (i18n.copyTldr || 'Copy TL;DR')); }, 2000);
     });
 
     /* ═══════════════════════════════════════════════════════
@@ -592,23 +607,19 @@
         var html = '';
 
         if (d.improvements && d.improvements.length) {
-            html += '<div style="background:#fffbeb; border:1px solid #fde68a; border-radius:6px; padding:8px 12px; margin-bottom:10px; font-size:11px;">'
-                + '<strong style="color:#92400e;">Co poprawiono:</strong> '
+            html += '<div class="cqa-improvements-notice">'
+                + '<strong>' + (i18n.whatImproved || 'What was improved:') + '</strong> '
                 + $.map(d.improvements, function (imp) { return esc(imp); }).join(' · ')
                 + '</div>';
         }
 
-        html += '<div class="cqa-rewrite-panels">';
-
         $.each(d.rewrites || [], function (i, rewrite) {
-            html += '<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 12px;">'
-                + '<div style="font-size:10px; font-weight:700; color:#6366f1; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Wersja ' + (i + 1) + '</div>'
-                + '<div style="font-size:12px; color:#1e293b; line-height:1.6; margin-bottom:8px;">' + esc(rewrite) + '</div>'
-                + '<button type="button" class="button cqa-rewrite-copy" style="font-size:11px;" data-text="' + esc(rewrite) + '">📋 Kopiuj</button>'
+            html += '<div class="cqa-rewrite-panel">'
+                + '<div class="cqa-rewrite-ver">' + (i18n.version || 'Version') + ' ' + (i + 1) + '</div>'
+                + '<div class="cqa-rewrite-text">' + esc(rewrite) + '</div>'
+                + '<button type="button" class="button cqa-rewrite-copy" style="font-size:11px;" data-text="' + esc(rewrite) + '">📋 ' + (i18n.copy || 'Copy') + '</button>'
                 + '</div>';
         });
-
-        html += '</div>';
 
         $('#cqa-rewrite-output').html(html);
     }
@@ -618,20 +629,20 @@
         var fragment = $('#cqa-rewrite-input').val().trim();
         var hint     = $('#cqa-rewrite-hint').val().trim();
 
-        if (!fragment) { $('#cqa-rewrite-status').text('Wklej fragment tekstu.'); return; }
+        if (!fragment) { $('#cqa-rewrite-status').text(i18n.noContent || 'No content.'); return; }
 
-        $btn.prop('disabled', true).text('Przepisuję…');
+        $btn.prop('disabled', true).text(i18n.rewriting || 'Rewriting…');
         $('#cqa-rewrite-status').text('');
         $('#cqa-rewrite-output').html('');
 
         ajaxPost('cqa_rewrite_fragment', { fragment: fragment, hint: hint },
             function (data) {
-                $btn.prop('disabled', false).text('✏️ Przepisz fragment');
+                $btn.prop('disabled', false).text('✏️ ' + ($('#cqa-btn-rewrite').attr('data-orig') || 'Rewrite fragment'));
                 renderRewrite(data);
             },
             function (err) {
-                $btn.prop('disabled', false).text('✏️ Przepisz fragment');
-                $('#cqa-rewrite-status').text('Błąd: ' + err);
+                $btn.prop('disabled', false).text('✏️ ' + ($('#cqa-btn-rewrite').attr('data-orig') || 'Rewrite fragment'));
+                $('#cqa-rewrite-status').text((i18n.errPrefix || 'Error: ') + err);
             }
         );
     });
@@ -641,26 +652,99 @@
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
         }
-        $(this).text('✓ Skopiowano!');
+        $(this).text('✓ ' + (i18n.copied || 'Copied!'));
         var $btn = $(this);
-        setTimeout(function () { $btn.text('📋 Kopiuj'); }, 2000);
+        setTimeout(function () { $btn.text('📋 ' + (i18n.copy || 'Copy')); }, 2000);
     });
 
     /* ═══════════════════════════════════════════════════════
-       HISTORY
+       HISTORY + SPARKLINE
     ═══════════════════════════════════════════════════════ */
+
+    function buildSparkline(history) {
+        var n = history.length;
+        if (n < 2) return '';
+
+        var W = 300, H = 80, pad = 20;
+
+        function points(key) {
+            var pts = [];
+            $.each(history, function (i, e) {
+                if (e[key] !== null && e[key] !== undefined) {
+                    pts.push({ x: i, y: e[key] });
+                }
+            });
+            return pts;
+        }
+
+        function toPath(pts) {
+            if (!pts.length) return '';
+            var d = '';
+            $.each(pts, function (i, p) {
+                var x = pad + (p.x / Math.max(n - 1, 1)) * (W - pad * 2);
+                var y = H - pad - (p.y / 100) * (H - pad * 2);
+                d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
+            });
+            return d;
+        }
+
+        var readPts = points('read_score');
+        var aiPts   = points('ai_score');
+        if (!readPts.length && !aiPts.length) return '';
+
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" class="cqa-sparkline">';
+
+        // Grid lines
+        $.each([25, 50, 75, 100], function (i, v) {
+            var y = (H - pad - (v / 100) * (H - pad * 2)).toFixed(1);
+            svg += '<line x1="' + pad + '" y1="' + y + '" x2="' + (W - pad) + '" y2="' + y + '" stroke="#e2e8f0" stroke-width="1"/>';
+            svg += '<text x="' + (pad - 3) + '" y="' + (parseFloat(y) + 3) + '" font-size="8" fill="#94a3b8" text-anchor="end">' + v + '</text>';
+        });
+
+        if (readPts.length > 1) {
+            svg += '<path d="' + toPath(readPts) + '" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+            $.each(readPts, function (i, p) {
+                var x = (pad + (p.x / Math.max(n - 1, 1)) * (W - pad * 2)).toFixed(1);
+                var y = (H - pad - (p.y / 100) * (H - pad * 2)).toFixed(1);
+                svg += '<circle cx="' + x + '" cy="' + y + '" r="3" fill="#6366f1"/>';
+            });
+        }
+
+        if (aiPts.length > 1) {
+            svg += '<path d="' + toPath(aiPts) + '" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+            $.each(aiPts, function (i, p) {
+                var x = (pad + (p.x / Math.max(n - 1, 1)) * (W - pad * 2)).toFixed(1);
+                var y = (H - pad - (p.y / 100) * (H - pad * 2)).toFixed(1);
+                svg += '<circle cx="' + x + '" cy="' + y + '" r="3" fill="#0ea5e9"/>';
+            });
+        }
+
+        svg += '</svg>';
+
+        var legend = '<div class="cqa-sparkline-legend">';
+        if (readPts.length > 1) legend += '<span class="cqa-sparkline-dot">' + (i18n.histRead || 'Readability') + '</span>';
+        if (aiPts.length > 1)   legend += '<span class="cqa-sparkline-dot cqa-sparkline-dot--ai">' + (i18n.histAi || 'AI-Friendly') + '</span>';
+        legend += '</div>';
+
+        return '<div class="cqa-sparkline-wrap">' + svg + legend + '</div>';
+    }
 
     function renderHistory(history) {
         var $wrap = $('#cqa-history-wrap');
 
         if (!history || !history.length) {
-            $wrap.html('<p style="font-size:12px; color:#94a3b8;">Brak historii analiz.</p>');
+            $wrap.html('<p style="font-size:12px; color:#94a3b8;">' + (i18n.noHistory || 'No analysis history.') + '</p>');
             return;
         }
 
-        var html = '<table class="cqa-history-table">'
+        var html = buildSparkline(history);
+
+        html += '<table class="cqa-history-table">'
             + '<thead><tr>'
-            + '<th>Data</th><th>Błędy pisowni</th><th>Czytelność</th><th>AI-Friendly</th>'
+            + '<th>' + (i18n.histDate || 'Date') + '</th>'
+            + '<th>' + (i18n.histSpell || 'Spelling errors') + '</th>'
+            + '<th>' + (i18n.histRead || 'Readability') + '</th>'
+            + '<th>' + (i18n.histAi || 'AI-Friendly') + '</th>'
             + '</tr></thead><tbody>';
 
         $.each(history, function (i, entry) {
@@ -695,22 +779,22 @@
     $(document).on('click', '#cqa-btn-spell', function () {
         var $btn    = $(this);
         var content = extractContent();
-        if (!content.trim()) { $('#cqa-spell-status').text('Brak treści.'); return; }
+        if (!content.trim()) { $('#cqa-spell-status').text(i18n.noContent || 'No content.'); return; }
 
-        $btn.prop('disabled', true).text('Sprawdzam…');
+        $btn.prop('disabled', true).text(i18n.checking || 'Checking…');
         $('#cqa-spell-status').text('');
         $('#cqa-spell-list').empty();
         $('#cqa-spell-empty, #cqa-spell-actions').hide();
 
         ajaxPost('cqa_spell_check', { content: content },
             function (data) {
-                $btn.prop('disabled', false).text('🔍 Sprawdź pisownię');
+                $btn.prop('disabled', false).text('🔍 ' + ($('#cqa-btn-spell').data('label') || 'Check spelling'));
                 renderSpell(data);
                 $('#cqa-section-spell .cqa-section-body').slideDown(200);
             },
             function (err) {
-                $btn.prop('disabled', false).text('🔍 Sprawdź pisownię');
-                $('#cqa-spell-status').text('Błąd: ' + err);
+                $btn.prop('disabled', false).text('🔍 ' + ($('#cqa-btn-spell').data('label') || 'Check spelling'));
+                $('#cqa-spell-status').text((i18n.errPrefix || 'Error: ') + err);
             }
         );
     });
@@ -718,21 +802,21 @@
     $(document).on('click', '#cqa-btn-readability', function () {
         var $btn    = $(this);
         var content = extractContent();
-        if (!content.trim()) { $('#cqa-readability-status').text('Brak treści.'); return; }
+        if (!content.trim()) { $('#cqa-readability-status').text(i18n.noContent || 'No content.'); return; }
 
-        $btn.prop('disabled', true).text('Analizuję…');
+        $btn.prop('disabled', true).text(i18n.analyzing || 'Analyzing…');
         $('#cqa-readability-status').text('');
         $('#cqa-readability-results').hide().html('');
 
         ajaxPost('cqa_readability', { content: content },
             function (data) {
-                $btn.prop('disabled', false).text('📊 Analizuj czytelność');
+                $btn.prop('disabled', false).text('📊 ' + ($('#cqa-btn-readability').data('label') || 'Analyze readability'));
                 renderReadability(data);
                 $('#cqa-section-readability .cqa-section-body').slideDown(200);
             },
             function (err) {
-                $btn.prop('disabled', false).text('📊 Analizuj czytelność');
-                $('#cqa-readability-status').text('Błąd: ' + err);
+                $btn.prop('disabled', false).text('📊 ' + ($('#cqa-btn-readability').data('label') || 'Analyze readability'));
+                $('#cqa-readability-status').text((i18n.errPrefix || 'Error: ') + err);
             }
         );
     });
@@ -740,21 +824,21 @@
     $(document).on('click', '#cqa-btn-aifriendly', function () {
         var $btn    = $(this);
         var content = extractContent();
-        if (!content.trim()) { $('#cqa-aifriendly-status').text('Brak treści.'); return; }
+        if (!content.trim()) { $('#cqa-aifriendly-status').text(i18n.noContent || 'No content.'); return; }
 
-        $btn.prop('disabled', true).text('Analizuję…');
+        $btn.prop('disabled', true).text(i18n.analyzing || 'Analyzing…');
         $('#cqa-aifriendly-status').text('');
         $('#cqa-aifriendly-results').hide().html('');
 
         ajaxPost('cqa_ai_friendly', { content: content, post_title: getPostTitle() },
             function (data) {
-                $btn.prop('disabled', false).text('🤖 Sprawdź AI-Friendly');
+                $btn.prop('disabled', false).text('🤖 ' + ($('#cqa-btn-aifriendly').data('label') || 'Check AI-Friendly'));
                 renderAiFriendly(data);
                 $('#cqa-section-aifriendly .cqa-section-body').slideDown(200);
             },
             function (err) {
-                $btn.prop('disabled', false).text('🤖 Sprawdź AI-Friendly');
-                $('#cqa-aifriendly-status').text('Błąd: ' + err);
+                $btn.prop('disabled', false).text('🤖 ' + ($('#cqa-btn-aifriendly').data('label') || 'Check AI-Friendly'));
+                $('#cqa-aifriendly-status').text((i18n.errPrefix || 'Error: ') + err);
             }
         );
     });
@@ -766,7 +850,9 @@
     $(document).on('click', '#cqa-btn-all', function () {
         var content = extractContent();
         if (!content.trim()) {
-            alert('Brak treści do analizy. Dodaj treść do wpisu.');
+            $('#cqa-all-progress').show();
+            $('#cqa-all-label').text(i18n.noContentAlert || 'No content to analyze. Please add content to the post.');
+            setTimeout(function () { $('#cqa-all-progress').hide(); }, 3000);
             return;
         }
 
@@ -774,26 +860,26 @@
         var $progress = $('#cqa-all-progress');
         var $cost     = $('#cqa-all-cost');
 
-        $btn.prop('disabled', true).text('Analizuję…');
+        $btn.prop('disabled', true).text(i18n.analyzing || 'Analyzing…');
         $progress.show();
         $cost.hide();
 
         var totalCost = 0;
         var steps = [
-            { action: 'cqa_spell_check',  pct: 33, label: 'Sprawdzam pisownię…',     render: renderSpell,      section: '#cqa-section-spell' },
-            { action: 'cqa_readability',   pct: 66, label: 'Analizuję czytelność…',   render: renderReadability, section: '#cqa-section-readability' },
-            { action: 'cqa_ai_friendly',   pct: 99, label: 'Weryfikuję AI-Friendly…', render: renderAiFriendly,  section: '#cqa-section-aifriendly' },
+            { action: 'cqa_spell_check',  pct: 33, label: i18n.checkingSpelling || 'Checking spelling…',     render: renderSpell,       section: '#cqa-section-spell' },
+            { action: 'cqa_readability',   pct: 66, label: i18n.analyzingRead    || 'Analyzing readability…', render: renderReadability,  section: '#cqa-section-readability' },
+            { action: 'cqa_ai_friendly',   pct: 99, label: i18n.checkingAI       || 'Checking AI-Friendly…',  render: renderAiFriendly,   section: '#cqa-section-aifriendly' },
         ];
 
-        setProgress('cqa-all-fill', 'cqa-all-pct', 'cqa-all-label', 0, 'Przygotowuję…');
+        setProgress('cqa-all-fill', 'cqa-all-pct', 'cqa-all-label', 0, i18n.preparing || 'Preparing…');
 
         function runStep(index) {
             if (index >= steps.length) {
-                setProgress('cqa-all-fill', 'cqa-all-pct', 'cqa-all-label', 100, 'Gotowe!');
-                $btn.prop('disabled', false).text('✨ Analizuj wszystko');
+                setProgress('cqa-all-fill', 'cqa-all-pct', 'cqa-all-label', 100, i18n.done || 'Done!');
+                $btn.prop('disabled', false).text('✨ ' + ($('#cqa-btn-all').data('label') || 'Analyze all'));
                 setTimeout(function () { $progress.hide(); }, 1500);
                 if (totalCost > 0) {
-                    $cost.text('Koszt: $' + totalCost.toFixed(5)).show();
+                    $cost.text((i18n.costPrefix || 'Cost: $') + totalCost.toFixed(5)).show();
                 }
                 return;
             }
@@ -829,6 +915,12 @@
     ═══════════════════════════════════════════════════════ */
 
     $(function () {
+        // Store button labels for restoring after async ops
+        $('#cqa-btn-spell').data('label', $('#cqa-btn-spell').text().replace(/^[^\s]+\s/, '').trim());
+        $('#cqa-btn-readability').data('label', $('#cqa-btn-readability').text().replace(/^[^\s]+\s/, '').trim());
+        $('#cqa-btn-aifriendly').data('label', $('#cqa-btn-aifriendly').text().replace(/^[^\s]+\s/, '').trim());
+        $('#cqa-btn-all').data('label', $('#cqa-btn-all').text().replace(/^[^\s]+\s/, '').trim());
+
         if (panel.cachedSpell) {
             renderSpell(panel.cachedSpell);
         }

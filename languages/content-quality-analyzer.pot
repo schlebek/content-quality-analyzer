@@ -59,7 +59,13 @@ msgstr ""
 msgid "Apply selected fixes"
 msgstr ""
 
+msgid "Avg. sentence"
+msgstr ""
+
 msgid "Batch analysis"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Check AI-Friendly"
@@ -68,7 +74,34 @@ msgstr ""
 msgid "Check spelling"
 msgstr ""
 
+msgid "Checking…"
+msgstr ""
+
+msgid "Checking AI-Friendly…"
+msgstr ""
+
+msgid "Checking spelling…"
+msgstr ""
+
+msgid "Analyzing readability…"
+msgstr ""
+
 msgid "Click \"Test connection\" to load available models."
+msgstr ""
+
+msgid "Clarity"
+msgstr ""
+
+msgid "Complex words"
+msgstr ""
+
+msgid "Conciseness"
+msgstr ""
+
+msgid "Connected! Models loaded."
+msgstr ""
+
+msgid "Connection error."
 msgstr ""
 
 msgid "Content Analyzer"
@@ -77,16 +110,49 @@ msgstr ""
 msgid "Content Quality Analyzer"
 msgstr ""
 
+msgid "Copied!"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Copy TL;DR"
+msgstr ""
+
+msgid "Copy all fixes"
+msgstr ""
+
 msgid "Cost / analysis"
+msgstr ""
+
+msgid "Cost: $"
+msgstr ""
+
+msgid "Date"
 msgstr ""
 
 msgid "Dismiss all"
 msgstr ""
 
+msgid "Done!"
+msgstr ""
+
+msgid "Engagement"
+msgstr ""
+
+msgid "Error: "
+msgstr ""
+
 msgid "Estimated analysis costs (Gemini Flash)"
 msgstr ""
 
+msgid "Find"
+msgstr ""
+
 msgid "First configure your API key in the %s tab."
+msgstr ""
+
+msgid "Fix"
 msgstr ""
 
 msgid "Flash = cheaper | Pro = better for long analyses"
@@ -98,16 +164,28 @@ msgstr ""
 msgid "Gemini Model"
 msgstr ""
 
+msgid "Generating…"
+msgstr ""
+
 msgid "Get your API key from %s."
 msgstr ""
 
 msgid "Google Gemini API Configuration"
 msgstr ""
 
+msgid "H2/H3 headings"
+msgstr ""
+
 msgid "Heading Structure"
 msgstr ""
 
+msgid "Heading structure is correct."
+msgstr ""
+
 msgid "Hint (optional): e.g. simplify sentences, add examples…"
+msgstr ""
+
+msgid "Improvement priorities"
 msgstr ""
 
 msgid "Insufficient permissions."
@@ -116,13 +194,46 @@ msgstr ""
 msgid "Invalid key or no models available — check your key permissions in Google AI Studio."
 msgstr ""
 
+msgid "Issues"
+msgstr ""
+
+msgid "Jargon"
+msgstr ""
+
+msgid "Key points"
+msgstr ""
+
 msgid "Load list"
 msgstr ""
 
 msgid "Load posts"
 msgstr ""
 
+msgid "Loading…"
+msgstr ""
+
+msgid "Logical flow"
+msgstr ""
+
+msgid "Long sentences"
+msgstr ""
+
 msgid "Missing API key or model. Please configure the plugin."
+msgstr ""
+
+msgid "No H1 heading."
+msgstr ""
+
+msgid "No H2 headings — add sections."
+msgstr ""
+
+msgid "No analysis history."
+msgstr ""
+
+msgid "No content."
+msgstr ""
+
+msgid "No content to analyze. Please add content to the post."
 msgstr ""
 
 msgid "No content to analyze."
@@ -140,7 +251,43 @@ msgstr ""
 msgid "No fragment to rewrite."
 msgstr ""
 
+msgid "No headings found in content."
+msgstr ""
+
+msgid "No models available"
+msgstr ""
+
+msgid "No posts."
+msgstr ""
+
+msgid "No posts found."
+msgstr ""
+
+msgid "No spelling errors found."
+msgstr ""
+
+msgid "Not found"
+msgstr ""
+
+msgid "(no title)"
+msgstr ""
+
+msgid "(no text)"
+msgstr ""
+
 msgid "Overview"
+msgstr ""
+
+msgid "Page %1$d of %2$d"
+msgstr ""
+
+msgid "Para. structure"
+msgstr ""
+
+msgid "Paragraphs"
+msgstr ""
+
+msgid "Passive voice"
 msgstr ""
 
 msgid "Paste a text fragment to rewrite:"
@@ -149,7 +296,13 @@ msgstr ""
 msgid "Paste text fragment…"
 msgstr ""
 
+msgid "Please enter an API key."
+msgstr ""
+
 msgid "Please provide an API key."
+msgstr ""
+
+msgid "Please select at least one type."
 msgstr ""
 
 msgid "Post types to analyze"
@@ -161,10 +314,19 @@ msgstr ""
 msgid "Preparing…"
 msgstr ""
 
+msgid "Preview"
+msgstr ""
+
 msgid "Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)"
 msgstr ""
 
 msgid "Readability"
+msgstr ""
+
+msgid "Reading time:"
+msgstr ""
+
+msgid "Reset cost counter?"
 msgstr ""
 
 msgid "Reset counter"
@@ -176,7 +338,13 @@ msgstr ""
 msgid "Rewrite fragment"
 msgstr ""
 
+msgid "Rewriting…"
+msgstr ""
+
 msgid "Run analysis"
+msgstr ""
+
+msgid "AI-Friendly"
 msgstr ""
 
 msgid "Save settings"
@@ -188,7 +356,25 @@ msgstr ""
 msgid "Search post by title…"
 msgstr ""
 
+msgid "Searching…"
+msgstr ""
+
 msgid "Select a post"
+msgstr ""
+
+msgid "Sent. variety"
+msgstr ""
+
+msgid "Sentences"
+msgstr ""
+
+msgid "Settings →"
+msgstr ""
+
+msgid "Short sentences"
+msgstr ""
+
+msgid "Skipped level after"
 msgstr ""
 
 msgid "Spelling"
@@ -200,7 +386,16 @@ msgstr ""
 msgid "Spelling corrector"
 msgstr ""
 
+msgid "Spelling errors"
+msgstr ""
+
 msgid "Stop"
+msgstr ""
+
+msgid "Stopped by user."
+msgstr ""
+
+msgid "Strengths"
 msgstr ""
 
 msgid "TL;DR Generator"
@@ -209,7 +404,13 @@ msgstr ""
 msgid "Test connection"
 msgstr ""
 
+msgid "Testing…"
+msgstr ""
+
 msgid "Text Readability"
+msgstr ""
+
+msgid "Title"
 msgstr ""
 
 msgid "Tokens IN (est.)"
@@ -218,8 +419,62 @@ msgstr ""
 msgid "Tokens OUT (est.)"
 msgstr ""
 
+msgid "Top improvements"
+msgstr ""
+
 msgid "Total cost since last reset"
 msgstr ""
 
+msgid "Type"
+msgstr ""
+
+msgid "Unknown error"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Vocabulary"
+msgstr ""
+
+msgid "What was improved:"
+msgstr ""
+
+msgid "Words"
+msgstr ""
+
+msgid "Yes, reset"
+msgstr ""
+
+msgid "actions"
+msgstr ""
+
 msgid "errors"
+msgstr ""
+
+msgid "min"
+msgstr ""
+
+msgid "posts"
+msgstr ""
+
+msgid "readability"
+msgstr ""
+
+msgid "spelling"
+msgstr ""
+
+msgid "words"
+msgstr ""
+
+msgid "0 errors"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "✓ No errors"
+msgstr ""
+
+msgid "More than one H1"
 msgstr ""

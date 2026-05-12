@@ -2,8 +2,9 @@
 (function ($) {
     'use strict';
 
-    var panel = window.cqaPanel || {};
-    var i18n  = panel.i18n || {};
+    var panel             = window.cqaPanel || {};
+    var i18n              = panel.i18n || {};
+    var currentAiOverrides = {};
 
     /* ── Editor helpers ───────────────────────────────────── */
 
@@ -369,13 +370,55 @@
        AI-FRIENDLY
     ═══════════════════════════════════════════════════════ */
 
+    function calcAiScore(criteria) {
+        var pass = 0, warn = 0;
+        $.each(criteria, function (i, c) {
+            if (c.status === 'pass') pass++;
+            else if (c.status === 'warn') warn++;
+        });
+        var score = Math.min(100, Math.round(pass * 5 + warn * 2.5));
+        var grade = score >= 90 ? 'A' : (score >= 75 ? 'B' : (score >= 55 ? 'C' : (score >= 40 ? 'D' : 'F')));
+        return { score: score, grade: grade };
+    }
+
+    function updateAiScore() {
+        var pass = 0, warn = 0;
+        $('#cqa-aifriendly-results .cqa-criterion').each(function () {
+            if ($(this).hasClass('cqa-criterion--pass')) pass++;
+            else if ($(this).hasClass('cqa-criterion--warn')) warn++;
+        });
+        var score = Math.min(100, Math.round(pass * 5 + warn * 2.5));
+        var grade = score >= 90 ? 'A' : (score >= 75 ? 'B' : (score >= 55 ? 'C' : (score >= 40 ? 'D' : 'F')));
+        var color = gradeColor(score);
+
+        var $res = $('#cqa-aifriendly-results');
+        $res.find('.cqa-score-ring').css('--cqa-ring', color);
+        $res.find('.cqa-score-value').text(score);
+        $res.find('.cqa-score-grade').text(grade).css('color', color);
+
+        var bc = score >= 80 ? 'badge-green' : (score >= 60 ? 'badge-yellow' : (score >= 40 ? 'badge-orange' : 'badge-red'));
+        setBadge('cqa-badge-aifriendly', score + '/100 ' + grade, bc);
+    }
+
     function renderAiFriendly(d) {
-        var score    = d.score    || 0;
-        var grade    = d.grade    || '?';
-        var criteria = d.criteria || [];
-        var summary  = d.summary  || '';
-        var tops     = d.top_improvements || [];
-        var color    = gradeColor(score);
+        var rawCriteria = d.criteria || [];
+        var summary     = d.summary  || '';
+        var tops        = d.top_improvements || [];
+
+        // Apply manual overrides: promote warn/fail → pass for user-verified items
+        var criteria = $.map(rawCriteria, function (c) {
+            var overridden = !!currentAiOverrides[c.id] && c.status !== 'pass';
+            return $.extend({}, c, {
+                origStatus: c.status,
+                status:     overridden ? 'pass' : c.status,
+                overridden: overridden
+            });
+        });
+
+        var sg    = calcAiScore(criteria);
+        var score = sg.score;
+        var grade = sg.grade;
+        var color = gradeColor(score);
 
         var html = '<div class="cqa-score-header">';
         html += scoreCircle(score, grade, color);
@@ -393,11 +436,36 @@
 
         html += '<div class="cqa-criteria-grid">';
         $.each(criteria, function (i, c) {
-            var icon = c.status === 'pass' ? '✅' : (c.status === 'warn' ? '⚠️' : '❌');
-            html += '<div class="cqa-criterion cqa-criterion--' + esc(c.status || 'fail') + '">'
-                + '<div class="cqa-criterion-label">' + icon + ' ' + esc(c.label || c.id) + '</div>'
-                + (c.note ? '<div class="cqa-criterion-note">' + esc(c.note) + '</div>' : '')
+            var icon     = c.status === 'pass' ? '✅' : (c.status === 'warn' ? '⚠️' : '❌');
+            var modClass = c.overridden ? ' cqa-criterion--overridden' : '';
+            html += '<div class="cqa-criterion cqa-criterion--' + esc(c.status) + modClass + '"'
+                + ' data-criterion-id="' + esc(c.id) + '"'
+                + ' data-orig-status="' + esc(c.origStatus) + '">';
+
+            html += '<div class="cqa-criterion-label">'
+                + '<span class="cqa-criterion-icon">' + icon + '</span> '
+                + esc(c.label || c.id)
+                + (c.overridden ? '<span class="cqa-criterion-override-badge">' + esc(i18n.verifiedLabel || 'manual') + '</span>' : '')
                 + '</div>';
+
+            if (c.note) {
+                html += '<div class="cqa-criterion-note">' + esc(c.note) + '</div>';
+            }
+
+            // Checkbox for criteria that weren't a native AI pass
+            if (c.origStatus !== 'pass') {
+                html += '<div class="cqa-override-check-wrap">'
+                    + '<label class="cqa-override-check-label">'
+                    + '<input type="checkbox" class="cqa-override-check"'
+                    + ' data-criterion-id="' + esc(c.id) + '"'
+                    + (c.overridden ? ' checked' : '')
+                    + '> '
+                    + esc(i18n.overrideLabel || 'Verified / Added')
+                    + '</label>'
+                    + '</div>';
+            }
+
+            html += '</div>';
         });
         html += '</div>';
 
@@ -406,6 +474,45 @@
         var bc = score >= 80 ? 'badge-green' : (score >= 60 ? 'badge-yellow' : (score >= 40 ? 'badge-orange' : 'badge-red'));
         setBadge('cqa-badge-aifriendly', score + '/100 ' + grade, bc);
     }
+
+    $(document).on('change', '.cqa-override-check', function () {
+        var $cb         = $(this);
+        var criterionId = $cb.data('criterion-id');
+        var checked     = $cb.is(':checked');
+        var $criterion  = $('#cqa-aifriendly-results .cqa-criterion[data-criterion-id="' + criterionId + '"]');
+        var origStatus  = $criterion.data('orig-status');
+
+        $cb.prop('disabled', true);
+
+        ajaxPost('cqa_save_aifriendly_override', { criterion_id: criterionId, checked: checked ? 1 : 0 },
+            function () {
+                if (checked) {
+                    currentAiOverrides[criterionId] = true;
+                    $criterion
+                        .removeClass('cqa-criterion--warn cqa-criterion--fail')
+                        .addClass('cqa-criterion--pass cqa-criterion--overridden');
+                    $criterion.find('.cqa-criterion-icon').text('✅');
+                    if (!$criterion.find('.cqa-criterion-override-badge').length) {
+                        $criterion.find('.cqa-criterion-label').append(
+                            '<span class="cqa-criterion-override-badge">' + esc(i18n.verifiedLabel || 'manual') + '</span>'
+                        );
+                    }
+                } else {
+                    delete currentAiOverrides[criterionId];
+                    $criterion
+                        .removeClass('cqa-criterion--pass cqa-criterion--overridden')
+                        .addClass('cqa-criterion--' + origStatus);
+                    $criterion.find('.cqa-criterion-icon').text(origStatus === 'warn' ? '⚠️' : '❌');
+                    $criterion.find('.cqa-criterion-override-badge').remove();
+                }
+                $cb.prop('disabled', false);
+                updateAiScore();
+            },
+            function () {
+                $cb.prop('checked', !checked).prop('disabled', false);
+            }
+        );
+    });
 
     /* ═══════════════════════════════════════════════════════
        HEADING ANALYSIS (client-side)
@@ -915,6 +1022,11 @@
     ═══════════════════════════════════════════════════════ */
 
     $(function () {
+        // Init override state from PHP-passed data
+        if (panel.aiOverrides && Array.isArray(panel.aiOverrides)) {
+            $.each(panel.aiOverrides, function (i, id) { currentAiOverrides[id] = true; });
+        }
+
         // Store button labels for restoring after async ops
         $('#cqa-btn-spell').data('label', $('#cqa-btn-spell').text().replace(/^[^\s]+\s/, '').trim());
         $('#cqa-btn-readability').data('label', $('#cqa-btn-readability').text().replace(/^[^\s]+\s/, '').trim());

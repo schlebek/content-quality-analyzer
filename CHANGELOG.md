@@ -2,6 +2,18 @@
 
 All notable changes to Content Quality Analyzer are documented in this file.
 
+## [1.5.0] - 2026-05-12
+
+### Added
+- Manual override checkboxes for AI-Friendly criteria — allows marking warn/fail items as "Verified / Added" to reflect content that was manually corrected or added after the AI scan.
+- New AJAX endpoint `cqa_save_aifriendly_override` persisting per-post override state in `_cqa_aifriendly_overrides` post meta.
+- Green "manual" badge displayed on overridden criteria; AI-Friendly score recalculated live when overrides change.
+
+### Fixed
+- Unicode encoding bug: replaced `wp_localize_script()` with `wp_add_inline_script()` + `JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES` for both `cqaPanel` and `cqaAdmin` — Polish and other non-ASCII characters are no longer stored as `\uXXXX` escape sequences.
+- All cached AJAX responses now use `JSON_UNESCAPED_UNICODE` flag in `wp_json_encode()` and `wp_send_json_success()`.
+- Stale cache entries containing escaped Unicode sequences are auto-invalidated on next metabox load.
+
 ## [1.4.0] - 2026-04-20
 
 ### Added

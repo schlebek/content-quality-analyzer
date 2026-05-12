@@ -35,7 +35,7 @@ class CQA_Admin {
 		$public_types = get_post_types( array( 'public' => true ), 'objects' );
 		unset( $public_types['attachment'] );
 
-		wp_localize_script( 'cqa-admin', 'cqaAdmin', array(
+		$cqa_admin_data = array(
 			'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
 			'nonce'            => wp_create_nonce( 'cqa_nonce' ),
 			'models'           => $models,
@@ -85,7 +85,12 @@ class CQA_Admin {
 				'resetConfirmNo'   => __( 'Cancel', 'content-quality-analyzer' ),
 				'pageOf'           => __( 'Page %1$d of %2$d', 'content-quality-analyzer' ),
 			),
-		) );
+		);
+		wp_add_inline_script(
+			'cqa-admin',
+			'var cqaAdmin = ' . wp_json_encode( $cqa_admin_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . ';',
+			'before'
+		);
 	}
 
 	public function render_page(): void {

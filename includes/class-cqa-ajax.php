@@ -10,8 +10,9 @@ class CQA_Ajax {
 		add_action( 'wp_ajax_cqa_ai_friendly',      [ $this, 'ai_friendly' ] );
 		add_action( 'wp_ajax_cqa_rewrite_fragment', [ $this, 'rewrite_fragment' ] );
 		add_action( 'wp_ajax_cqa_generate_tldr',    [ $this, 'generate_tldr' ] );
-		add_action( 'wp_ajax_cqa_search_posts',     [ $this, 'search_posts' ] );
-		add_action( 'wp_ajax_cqa_overview_posts',   [ $this, 'overview_posts' ] );
+		add_action( 'wp_ajax_cqa_search_posts',              [ $this, 'search_posts' ] );
+		add_action( 'wp_ajax_cqa_overview_posts',            [ $this, 'overview_posts' ] );
+		add_action( 'wp_ajax_cqa_save_aifriendly_override', [ $this, 'save_aifriendly_override' ] );
 		// Settings — requires manage_options
 		add_action( 'wp_ajax_cqa_test_api',         [ $this, 'test_api' ] );
 		add_action( 'wp_ajax_cqa_reset_cost',       [ $this, 'reset_cost' ] );
@@ -190,7 +191,7 @@ class CQA_Ajax {
 		array_unshift( $history, $entry );
 		$history = array_slice( $history, 0, 10 );
 
-		update_post_meta( $post_id, '_cqa_history', wp_json_encode( $history ) );
+		update_post_meta( $post_id, '_cqa_history', wp_json_encode( $history, JSON_UNESCAPED_UNICODE ) );
 	}
 
 	/* ── Spell check ──────────────────────────────────────── */
@@ -220,12 +221,12 @@ class CQA_Ajax {
 		}
 
 		if ( $post_id > 0 ) {
-			update_post_meta( $post_id, '_cqa_spell_cache', wp_json_encode( $result ) );
+			update_post_meta( $post_id, '_cqa_spell_cache', wp_json_encode( $result, JSON_UNESCAPED_UNICODE ) );
 			update_post_meta( $post_id, '_cqa_spell_date',  time() );
 			$this->append_history( $post_id );
 		}
 
-		wp_send_json_success( $result );
+		wp_send_json_success( $result, null, JSON_UNESCAPED_UNICODE );
 	}
 
 	/* ── Readability ──────────────────────────────────────── */
@@ -255,12 +256,12 @@ class CQA_Ajax {
 		}
 
 		if ( $post_id > 0 ) {
-			update_post_meta( $post_id, '_cqa_readability_cache', wp_json_encode( $result ) );
+			update_post_meta( $post_id, '_cqa_readability_cache', wp_json_encode( $result, JSON_UNESCAPED_UNICODE ) );
 			update_post_meta( $post_id, '_cqa_readability_date',  time() );
 			$this->append_history( $post_id );
 		}
 
-		wp_send_json_success( $result );
+		wp_send_json_success( $result, null, JSON_UNESCAPED_UNICODE );
 	}
 
 	/* ── AI-Friendly ──────────────────────────────────────── */
@@ -295,12 +296,12 @@ class CQA_Ajax {
 		}
 
 		if ( $post_id > 0 ) {
-			update_post_meta( $post_id, '_cqa_aifriendly_cache', wp_json_encode( $result ) );
+			update_post_meta( $post_id, '_cqa_aifriendly_cache', wp_json_encode( $result, JSON_UNESCAPED_UNICODE ) );
 			update_post_meta( $post_id, '_cqa_aifriendly_date',  time() );
 			$this->append_history( $post_id );
 		}
 
-		wp_send_json_success( $result );
+		wp_send_json_success( $result, null, JSON_UNESCAPED_UNICODE );
 	}
 
 	/* ── Rewrite fragment ─────────────────────────────────── */
@@ -329,7 +330,7 @@ class CQA_Ajax {
 			wp_send_json_error( $result['error'] );
 		}
 
-		wp_send_json_success( $result );
+		wp_send_json_success( $result, null, JSON_UNESCAPED_UNICODE );
 	}
 
 	/* ── Generate TL;DR ───────────────────────────────────── */
@@ -358,7 +359,7 @@ class CQA_Ajax {
 			wp_send_json_error( $result['error'] );
 		}
 
-		wp_send_json_success( $result );
+		wp_send_json_success( $result, null, JSON_UNESCAPED_UNICODE );
 	}
 
 	/* ── Test API key ─────────────────────────────────────── */
@@ -483,6 +484,39 @@ class CQA_Ajax {
 		}
 
 		wp_send_json_success( $results );
+	}
+
+	/* ── AI-Friendly overrides ───────────────────────────── */
+
+	public function save_aifriendly_override(): void {
+		$this->verify_analyze();
+
+		$post_id      = absint( $_POST['post_id'] ?? 0 );
+		$criterion_id = sanitize_key( wp_unslash( $_POST['criterion_id'] ?? '' ) );
+		$checked      = ! empty( $_POST['checked'] ) && '0' !== $_POST['checked'] && 'false' !== $_POST['checked'];
+
+		if ( $post_id <= 0 || empty( $criterion_id ) ) {
+			wp_send_json_error( 'Invalid parameters.' );
+		}
+
+		$overrides_raw = get_post_meta( $post_id, '_cqa_aifriendly_overrides', true );
+		$overrides     = $overrides_raw ? json_decode( $overrides_raw, true ) : [];
+		if ( ! is_array( $overrides ) ) {
+			$overrides = [];
+		}
+
+		if ( $checked ) {
+			if ( ! in_array( $criterion_id, $overrides, true ) ) {
+				$overrides[] = $criterion_id;
+			}
+		} else {
+			$overrides = array_values( array_filter( $overrides, function( $id ) use ( $criterion_id ) {
+				return $id !== $criterion_id;
+			} ) );
+		}
+
+		update_post_meta( $post_id, '_cqa_aifriendly_overrides', wp_json_encode( $overrides ) );
+		wp_send_json_success( [ 'overrides' => $overrides ] );
 	}
 
 	/* ── Reset cost ───────────────────────────────────────── */

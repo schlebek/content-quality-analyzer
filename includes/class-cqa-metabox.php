@@ -254,10 +254,29 @@ class CQA_Metabox {
 
 		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
-		$spell_raw   = $post_id ? get_post_meta( $post_id, '_cqa_spell_cache',       true ) : '';
-		$read_raw    = $post_id ? get_post_meta( $post_id, '_cqa_readability_cache',  true ) : '';
-		$ai_raw      = $post_id ? get_post_meta( $post_id, '_cqa_aifriendly_cache',   true ) : '';
-		$history_raw = $post_id ? get_post_meta( $post_id, '_cqa_history',            true ) : '';
+		$spell_raw     = $post_id ? get_post_meta( $post_id, '_cqa_spell_cache',            true ) : '';
+		$read_raw      = $post_id ? get_post_meta( $post_id, '_cqa_readability_cache',     true ) : '';
+		$ai_raw        = $post_id ? get_post_meta( $post_id, '_cqa_aifriendly_cache',      true ) : '';
+		$history_raw   = $post_id ? get_post_meta( $post_id, '_cqa_history',               true ) : '';
+		$overrides_raw = $post_id ? get_post_meta( $post_id, '_cqa_aifriendly_overrides',  true ) : '';
+
+		// Auto-invalidate cache stored before JSON_UNESCAPED_UNICODE fix (contains \uXXXX sequences)
+		$old_pattern = '/\\\\u[0-9a-fA-F]{4}/';
+		if ( $post_id && $spell_raw && preg_match( $old_pattern, $spell_raw ) ) {
+			delete_post_meta( $post_id, '_cqa_spell_cache' );
+			delete_post_meta( $post_id, '_cqa_spell_date' );
+			$spell_raw = '';
+		}
+		if ( $post_id && $read_raw && preg_match( $old_pattern, $read_raw ) ) {
+			delete_post_meta( $post_id, '_cqa_readability_cache' );
+			delete_post_meta( $post_id, '_cqa_readability_date' );
+			$read_raw = '';
+		}
+		if ( $post_id && $ai_raw && preg_match( $old_pattern, $ai_raw ) ) {
+			delete_post_meta( $post_id, '_cqa_aifriendly_cache' );
+			delete_post_meta( $post_id, '_cqa_aifriendly_date' );
+			$ai_raw = '';
+		}
 
 		wp_enqueue_style(
 			'cqa-admin',
@@ -279,10 +298,11 @@ class CQA_Metabox {
 			'nonce'         => wp_create_nonce( 'cqa_nonce' ),
 			'postId'        => $post_id,
 			'settingsUrl'   => admin_url( 'admin.php?page=content-quality-analyzer' ),
-			'cachedSpell'   => $spell_raw   ? json_decode( $spell_raw,   true ) : null,
-			'cachedRead'    => $read_raw    ? json_decode( $read_raw,    true ) : null,
-			'cachedAi'      => $ai_raw      ? json_decode( $ai_raw,      true ) : null,
-			'cachedHistory' => $history_raw ? json_decode( $history_raw, true ) : null,
+			'cachedSpell'   => $spell_raw     ? json_decode( $spell_raw,     true ) : null,
+			'cachedRead'    => $read_raw      ? json_decode( $read_raw,      true ) : null,
+			'cachedAi'      => $ai_raw        ? json_decode( $ai_raw,        true ) : null,
+			'cachedHistory' => $history_raw   ? json_decode( $history_raw,   true ) : null,
+			'aiOverrides'   => $overrides_raw ? json_decode( $overrides_raw, true ) : [],
 			'i18n'          => array(
 				'unknownError'     => __( 'Unknown error', 'content-quality-analyzer' ),
 				'connectionError'  => __( 'Connection error.', 'content-quality-analyzer' ),
@@ -351,10 +371,16 @@ class CQA_Metabox {
 				'sidebarNoErrors'  => __( '✓ No errors', 'content-quality-analyzer' ),
 				'sidebarImprov'    => __( 'Improvement priorities', 'content-quality-analyzer' ),
 				'sidebarSettings'  => __( 'Settings →', 'content-quality-analyzer' ),
+				'overrideLabel'    => __( 'Verified / Added', 'content-quality-analyzer' ),
+				'verifiedLabel'    => __( 'manual', 'content-quality-analyzer' ),
 			),
 		);
 
-		wp_localize_script( 'cqa-metabox', 'cqaPanel', $localize );
+		wp_add_inline_script(
+			'cqa-metabox',
+			'var cqaPanel = ' . wp_json_encode( $localize, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . ';',
+			'before'
+		);
 
 		// Gutenberg Plugin Sidebar — only on block editor screens
 		if ( $screen->is_block_editor() ) {

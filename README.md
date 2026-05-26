@@ -71,13 +71,23 @@ Results are **cached in post meta** — you only pay for new or refreshed analys
 
 ## Available Models
 
-| Model | Best for | Generation |
-|-------|----------|:----------:|
-| `gemini-3.5-flash` | **Default** — highest quality & speed | Latest |
-| `gemini-2.5-flash` | Fast and cost-effective | Stable |
-| `gemini-2.5-pro` | Complex or very long content | Stable |
-| `gemini-2.0-flash` | Budget option | Previous |
+### Stable
 
+| Model | Best for |
+|-------|----------|
+| `gemini-3.5-flash` | **Default** — latest generation, best quality/speed balance |
+| `gemini-3.1-flash-lite` | Frontier-class performance at the lowest cost |
+| `gemini-2.5-pro` | Complex reasoning, very long or technical content |
+| `gemini-2.5-flash` | Best price-to-performance ratio |
+| `gemini-2.5-flash-lite` | Fastest and most affordable |
+
+### Preview
+
+| Model | Best for |
+|-------|----------|
+| `gemini-3.1-pro-preview` | Most advanced tasks, highest accuracy |
+
+> **Note:** Models `gemini-2.0-flash` and `gemini-2.0-flash-lite` are deprecated — avoid for new setups.  
 > Pricing: see [Google AI pricing page](https://ai.google.dev/pricing). A free tier is available for low-volume use.
 
 ---

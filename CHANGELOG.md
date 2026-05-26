@@ -2,6 +2,17 @@
 
 All notable changes to Content Quality Analyzer are documented in this file.
 
+## [1.5.1] - 2026-05-26
+
+### Fixed
+- Gemini 2.5+ / 3.x compatibility: added `thinkingConfig: {thinkingBudget: 0}` to all API requests to disable thinking tokens, which caused "Invalid JSON response from API" on newer models.
+- Response parsing now filters out `thought: true` parts before extracting JSON — fallback for models that ignore `thinkingConfig`.
+
+### Changed
+- Default model updated to `gemini-3.5-flash`.
+
+---
+
 ## [1.5.0] - 2026-05-12
 
 ### Added

@@ -28,7 +28,11 @@ class CQA_API {
 			'headers' => array( 'Content-Type' => 'application/json' ),
 			'body'    => wp_json_encode( array(
 				'contents'         => array( array( 'parts' => array( array( 'text' => $prompt ) ) ) ),
-				'generationConfig' => array( 'temperature' => $temp, 'maxOutputTokens' => $max_tokens ),
+				'generationConfig' => array(
+					'temperature'    => $temp,
+					'maxOutputTokens' => $max_tokens,
+					'thinkingConfig' => array( 'thinkingBudget' => 0 ),
+				),
 			) ),
 			'timeout' => 120,
 		) );
@@ -55,7 +59,20 @@ class CQA_API {
 			update_option( 'cqa_api_total_cost', (float) get_option( 'cqa_api_total_cost', 0.0 ) + $cost );
 		}
 
-		$raw = $data['candidates'][0]['content']['parts'][0]['text'] ?? '';
+		// Thinking models (Gemini 2.5+) prepend a thought part before the actual response.
+		// Find the first non-thought text part.
+		$parts = $data['candidates'][0]['content']['parts'] ?? [];
+		$raw   = '';
+		foreach ( $parts as $part ) {
+			if ( empty( $part['thought'] ) && isset( $part['text'] ) ) {
+				$raw = $part['text'];
+				break;
+			}
+		}
+		if ( $raw === '' ) {
+			$raw = $parts[0]['text'] ?? '';
+		}
+
 		$raw = preg_replace( '/^```(?:json)?\s*/i', '', trim( $raw ) );
 		$raw = preg_replace( '/\s*```$/', '', $raw );
 		preg_match( '/\{.*\}/s', $raw, $m );

@@ -375,7 +375,7 @@ class CQA_Admin {
 						</div>
 
 						<div class="cqa-card">
-							<h3><?php esc_html_e( 'Estimated analysis costs (Gemini Flash)', 'content-quality-analyzer' ); ?></h3>
+							<h3><?php esc_html_e( 'Estimated analysis costs (Gemini 2.5 Flash)', 'content-quality-analyzer' ); ?></h3>
 							<table class="widefat" style="margin-top:8px;">
 								<thead>
 									<tr>
@@ -394,7 +394,7 @@ class CQA_Admin {
 									<tr style="font-weight:600;"><td>✨ <?php esc_html_e( 'Analyze all', 'content-quality-analyzer' ); ?></td><td>~7 500</td><td>~2 500</td><td>~$0.00127</td></tr>
 								</tbody>
 							</table>
-							<p class="cqa-hint"><?php esc_html_e( 'Prices for Gemini 2.0 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)', 'content-quality-analyzer' ); ?></p>
+							<p class="cqa-hint"><?php esc_html_e( 'Prices for Gemini 2.5 Flash: $0.075/1M IN, $0.30/1M OUT (free tier: no charges up to limit)', 'content-quality-analyzer' ); ?></p>
 						</div>
 					</div>
 

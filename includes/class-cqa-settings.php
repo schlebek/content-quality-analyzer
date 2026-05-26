@@ -9,7 +9,7 @@ class CQA_Settings {
 		) );
 		register_setting( 'cqa-group', 'cqa_model', array(
 			'sanitize_callback' => 'sanitize_text_field',
-			'default'           => 'gemini-2.0-flash',
+			'default'           => 'gemini-3.5-flash',
 		) );
 		register_setting( 'cqa-group', 'cqa_post_types', array(
 			'sanitize_callback' => array( self::class, 'sanitize_post_types' ),
@@ -31,7 +31,7 @@ class CQA_Settings {
 	}
 
 	public static function model(): string {
-		return trim( (string) get_option( 'cqa_model', 'gemini-2.0-flash' ) );
+		return trim( (string) get_option( 'cqa_model', 'gemini-3.5-flash' ) );
 	}
 
 	public static function post_types(): array {

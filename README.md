@@ -158,6 +158,13 @@ See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
 ---
 
+## Contributing
+
+Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/schlebek/content-quality-analyzer/issues).
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+
+---
+
 ## License
 
 [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html)  

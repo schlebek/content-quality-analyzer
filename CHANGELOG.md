@@ -1,28 +1,39 @@
 # Changelog
 
-All notable changes to Content Quality Analyzer are documented in this file.
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
 
 ## [1.5.1] - 2026-05-26
 
 ### Fixed
-- Gemini 2.5+ / 3.x compatibility: added `thinkingConfig: {thinkingBudget: 0}` to all API requests to disable thinking tokens, which caused "Invalid JSON response from API" on newer models.
-- Response parsing now filters out `thought: true` parts before extracting JSON — fallback for models that ignore `thinkingConfig`.
+- Gemini 2.5+ / 3.x compatibility: added `thinkingConfig: {thinkingBudget: 0}` to all API
+  requests to disable thinking tokens, which caused "Invalid JSON response from API" on newer models.
+- Response parsing now filters out `thought: true` parts before extracting JSON — fallback for
+  models that ignore `thinkingConfig`.
 
 ### Changed
 - Default model updated to `gemini-3.5-flash`.
 
----
-
 ## [1.5.0] - 2026-05-12
 
 ### Added
-- Manual override checkboxes for AI-Friendly criteria — allows marking warn/fail items as "Verified / Added" to reflect content that was manually corrected or added after the AI scan.
-- New AJAX endpoint `cqa_save_aifriendly_override` persisting per-post override state in `_cqa_aifriendly_overrides` post meta.
-- Green "manual" badge displayed on overridden criteria; AI-Friendly score recalculated live when overrides change.
+- Manual override checkboxes for AI-Friendly criteria — allows marking warn/fail items as
+  "Verified / Added" to reflect content that was manually corrected or added after the AI scan.
+- New AJAX endpoint `cqa_save_aifriendly_override` persisting per-post override state in
+  `_cqa_aifriendly_overrides` post meta.
+- Green "manual" badge displayed on overridden criteria; AI-Friendly score recalculated live
+  when overrides change.
 
 ### Fixed
-- Unicode encoding bug: replaced `wp_localize_script()` with `wp_add_inline_script()` + `JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES` for both `cqaPanel` and `cqaAdmin` — Polish and other non-ASCII characters are no longer stored as `\uXXXX` escape sequences.
-- All cached AJAX responses now use `JSON_UNESCAPED_UNICODE` flag in `wp_json_encode()` and `wp_send_json_success()`.
+- Unicode encoding bug: replaced `wp_localize_script()` with `wp_add_inline_script()` +
+  `JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES` for both `cqaPanel` and `cqaAdmin` —
+  Polish and other non-ASCII characters are no longer stored as `\uXXXX` escape sequences.
+- All cached AJAX responses now use `JSON_UNESCAPED_UNICODE` flag in `wp_json_encode()` and
+  `wp_send_json_success()`.
 - Stale cache entries containing escaped Unicode sequences are auto-invalidated on next metabox load.
 
 ## [1.4.0] - 2026-04-20
@@ -35,25 +46,31 @@ All notable changes to Content Quality Analyzer are documented in this file.
 - New translation keys added to all 9 locales (de_DE, fr_FR, es_ES, it_IT, pt_BR, ru_RU, uk, nl_NL, cs_CZ).
 
 ### Changed
-- Rewrote all 5 Gemini API prompts from Polish to language-neutral English; AI now responds in the same language as the input text.
+- Rewrote all 5 Gemini API prompts from Polish to language-neutral English; AI now responds in
+  the same language as the input text.
 - Replaced all inline `style=` attributes in JS render functions with proper CSS classes.
-- Gutenberg sidebar rewritten from ES5 prototype-based class to functional component using `wp.element.useState` hooks.
+- Gutenberg sidebar rewritten from ES5 prototype-based class to functional component using
+  `wp.element.useState` hooks.
 
 ### Fixed
-- Removed `alert()` and `confirm()` dialogs — replaced with inline UI messages and two-click inline confirmation.
+- Removed `alert()` and `confirm()` dialogs — replaced with inline UI messages and two-click
+  inline confirmation.
 
 ## [1.2.0] - 2026-04-20
 
 ### Changed
-- WP.org compliance: replaced anonymous closures in hooks with named functions (`cqa_init`, `cqa_invalidate_cache`, `cqa_autoload`).
-- WP.org compliance: removed `sslverify => false` from all `wp_remote_post()` and `wp_remote_get()` calls.
+- WP.org compliance: replaced anonymous closures in hooks with named functions (`cqa_init`,
+  `cqa_invalidate_cache`, `cqa_autoload`).
+- WP.org compliance: removed `sslverify => false` from all `wp_remote_post()` and
+  `wp_remote_get()` calls.
 - WP.org compliance: added `sanitize_callback` to all `register_setting()` calls.
 - WP.org compliance: replaced `@set_time_limit()` with conditional `function_exists()` check.
 - Added `register_uninstall_hook()` pointing to `cqa_uninstall()` for clean option removal on delete.
 - Added `register_activation_hook()` setting default options on first activation.
 - Added full i18n support: `load_plugin_textdomain()` with 3-level locale fallback.
 - All user-facing PHP strings wrapped in i18n functions (`__()`, `esc_html_e()`, `esc_attr_e()`).
-- Added plugin header fields: Text Domain, Domain Path, Requires at least, Requires PHP, License, Plugin URI, Author URI.
+- Added plugin header fields: Text Domain, Domain Path, Requires at least, Requires PHP, License,
+  Plugin URI, Author URI.
 - Fixed version constant mismatch (header vs `CQA_VERSION` constant now both `1.2.0`).
 - Removed emoji from Plugin Name in header (kept in admin UI labels).
 
@@ -77,3 +94,11 @@ All notable changes to Content Quality Analyzer are documented in this file.
 - Google Gemini API integration.
 - Result caching via post meta with timestamp display.
 - Works with Classic Editor and Block Editor (Gutenberg).
+
+[Unreleased]: https://github.com/schlebek/content-quality-analyzer/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/schlebek/content-quality-analyzer/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/schlebek/content-quality-analyzer/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/schlebek/content-quality-analyzer/compare/v1.2.0...v1.4.0
+[1.2.0]: https://github.com/schlebek/content-quality-analyzer/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/schlebek/content-quality-analyzer/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/schlebek/content-quality-analyzer/releases/tag/v1.0.0

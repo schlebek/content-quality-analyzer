@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-05-27
+
+### Fixed
+- All global functions (`cqa_autoload`, `cqa_activate`, `cqa_uninstall`, `cqa_init`,
+  `cqa_load_textdomain`, `cqa_invalidate_cache`) are now guarded with `function_exists()`.
+  This prevents a fatal `Cannot redeclare` error when WordPress loads both the active plugin
+  and a freshly uploaded ZIP with a different folder name (e.g. `content-quality-analyzer-master`).
+
 ## [1.5.1] - 2026-05-26
 
 ### Fixed
